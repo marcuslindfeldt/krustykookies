@@ -3,3 +3,4 @@ composer.phar
 logs/*.log
 *.sublime-workspace
 *.sublime-project
+config/config.php
