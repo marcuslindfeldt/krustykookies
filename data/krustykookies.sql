@@ -217,15 +217,11 @@ INSERT INTO Pallets VALUES
 (NULL, NULL, 'Berliner', NOW());
 
 
--- Get the name and address of the customer that placed order 1
-SELECT name, address FROM Orders 
-INNER JOIN Customers USING (customer) WHERE order_id = 1;
-
--- Get the number of available Pallets in stock 
-SELECT cookie, COUNT(*) AS FROM Pallets 
-WHERE order_id IS NULL GROUP BY cookie;
-
--- Get all pallets that contain blocked cookies
-SELECT cookie, COUNT(*) FROM Pallets 
-INNER JOIN Blocked USING (cookie) 
-WHERE produced BETWEEN start AND end GROUP BY cookie;
+-- -- Get the name and address of the customer that placed order 1
+-- SELECT customer, address FROM Orders INNER JOIN Customers USING (customer) WHERE order_id = 1;
+-- 
+-- -- Get the number of available Pallets in stock 
+-- SELECT cookie, COUNT(*) FROM Pallets WHERE order_id IS NULL GROUP BY cookie;
+-- 
+-- -- Get all pallets that contain blocked cookies
+-- SELECT cookie, COUNT(*) FROM Pallets INNER JOIN Blocked USING (cookie) WHERE produced BETWEEN start AND end GROUP BY cookie;
