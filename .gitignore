@@ -1,3 +1,5 @@
 vendor/
 composer.phar
 logs/*.log
+*.sublime-workspace
+*.sublime-project
