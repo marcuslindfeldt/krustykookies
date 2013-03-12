@@ -9,7 +9,7 @@ Installation
 *   Set up git & clone the repo to e.g. /srv/web/
     <br /><https://help.github.com/articles/set-up-git>
 
-*   Optional: If you want to incorporate the project directly to Eclipse then go to File-&gt;Import-&gt;Projects from Git-&gt;Uri. Enter the URI of the repository (https://github.com/marcuslindfeldt/krustykookies.git) and your user details. Click Finish. The New Project wizard will show up. Select PHP Project. Choose a project name. Specify php version 5.4 and enable java support for better autocompletion. Click Finish and your done! <br /><br />
+*   Optional: If you want to incorporate the project directly to Eclipse then go to File-&gt;Import-&gt;Projects from Git-&gt;Uri. Enter the URI of the repository (https://github.com/marcuslindfeldt/krustykookies.git) and your user details. Click Next-&gt;Next-&gt;Next-&gt;Finish. The New Project wizard will show up. Select PHP Project. Choose a project name. Specify php version 5.4 and enable java support for better autocompletion. Click Finish and your done! <br /><br />
 OBS! This assumes that you already have the Eclipse PDT & EGit plugins installed.
 
 *   Install webserver & other important packages (ubuntu)<br />
