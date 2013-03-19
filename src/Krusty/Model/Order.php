@@ -11,7 +11,8 @@ class Order
 
 	public function toArray()
 	{
-		# code...
+		return ['id'    => $id,
+				'customer' => $customer];
 	}
 
 	public function toJson()
