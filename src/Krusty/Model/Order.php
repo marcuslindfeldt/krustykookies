@@ -11,8 +11,10 @@ class Order
 
 	public function toArray()
 	{
-		return ['id'    => $id,
-				'customer' => $customer];
+		$arr=array();
+		$arr['id']=$id;
+		$arr['customer']=$customer;
+		return $arr;
 	}
 
 	public function toJson()

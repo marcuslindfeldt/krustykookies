@@ -26,7 +26,9 @@ class OrderMapper extends AbstractMapper
 			return $db->query($sql)->fetchAll();
 		}
 		$stmt = $db->prepare($sql . ' WHERE order_id = :id');
-		$stmt->execute(['id' => $id]);
+		$stmtArray=array();
+		$stmtArray['id']=$id;
+		$stmt->execute($stmtArray);
 		return $stmt->fetchAll();
 	}
 }

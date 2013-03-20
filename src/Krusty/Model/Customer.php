@@ -29,8 +29,10 @@ class Customer
 
 	public function toArray()
 	{
-		return ['name'    => $name,
-				'address' => $address];
+		$arr=array();
+		$arr['name']=$name;
+		$arr['address']=$address;
+		return $arr;
 	}
 
 	public function toJson()
