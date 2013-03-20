@@ -24,8 +24,6 @@ $app->get('/', function () use ($app) {
 	$app->render('index.tpl');
 });
 
-phpinfo();
-
 // List all orders
 $app->get('/orders', function() use ($app, $orderService) {
 	// get orders from order service
