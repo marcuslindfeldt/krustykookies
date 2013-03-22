@@ -7,7 +7,8 @@ use \Slim\Slim,
 	\Krusty\Service\OrderService,
 	\Krusty\Service\CustomerService,
 	\Krusty\Service\RecipieService,
-	\Krusty\Service\CookieService;
+	\Krusty\Service\CookieService
+	\Krusty\Service\IngredientService;
 
 // Set dir for template engine
 Mustache::$mustacheDirectory = __DIR__ . '/../vendor/mustache/mustache/src/Mustache/';
@@ -23,6 +24,7 @@ $orderService = new OrderService();
 $customerService = new CustomerService();
 $recipieService = new RecipieService();
 $cookieService = new CookieService();
+$ingredientService = new IngredientService();
 //...
 
 // Define the index route
