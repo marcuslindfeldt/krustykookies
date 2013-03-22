@@ -5,7 +5,8 @@ require '../vendor/autoload.php';
 use \Slim\Slim,
 	\Slim\Extras\Views\Mustache,
 	\Krusty\Service\OrderService,
-	\Krusty\Service\CustomerService;
+	\Krusty\Service\CustomerService,
+	\Krusty\Service\CookieService;
 
 // Set dir for template engine
 Mustache::$mustacheDirectory = __DIR__ . '/../vendor/mustache/mustache/src/Mustache/';
@@ -19,6 +20,7 @@ $app = new Slim($appArray);
 // Init services
 $orderService = new OrderService();
 $customerService = new CustomerService();
+$cookieService = new CookieService();
 //...
 
 // Define the index route
@@ -47,6 +49,15 @@ $app->get('/customers', function() use ($app, $customerService) {
 	// get orders from order service
 	if( ($customers = $customerService->fetchCustomers()) != null ){
 	var_dump($customers);
+	}
+});
+
+//List all Cookies
+
+$app->get('/cookies', function() use ($app, $cookieService){
+	//get cookie from cookie service
+	if(($cookies = $cookieService-> fetchCookies()) != null){
+		var_dump($cookies);	
 	}
 });
 
