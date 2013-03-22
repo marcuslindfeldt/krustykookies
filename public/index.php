@@ -11,17 +11,15 @@ use \Slim\Slim,
 Mustache::$mustacheDirectory = __DIR__ . '/../vendor/mustache/mustache/src/Mustache/';
 
 // Init framework
-$app = new Slim([
-	'view' => new Mustache(),
-	'templates.path' => TEMPLATE_DIR
-]);
-
+$appArray=array();
+$appArray['view']=new Mustache();
+$appArray['templates.path']=TEMPLATE_DIR;
+$app = new Slim($appArray);
 
 // Init services
 $orderService = new OrderService();
 $customerService = new CustomerService();
 //...
-
 
 // Define the index route
 $app->get('/', function () use ($app) {
