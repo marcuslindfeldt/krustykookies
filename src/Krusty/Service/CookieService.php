@@ -9,10 +9,10 @@ class CookieService
 	private $model;
 	private $mapper;
 
-	public function fetchCookies()
+	public function fetchCookies($cookie = null)
 	{
 		$mapper = $this->getMapper();
-		return $mapper->fetch();
+		return $mapper->fetch($cookie);
 	}
 
 	public function addCookie(Cookie $cookie)

@@ -72,7 +72,7 @@ $app->get('/cookies', function() use ($app, $cookieService){
 	}
 });
 
-$app->get('/cookies:cookie', function($cookie) use ($app, $cookieService){
+$app->get('/cookies/:cookie', function($cookie) use ($app, $cookieService){
 	
 	//get cookie from cookie service
 	if(($cookies = $cookieService->fetchCookies($cookie)) != null){	
