@@ -5,7 +5,8 @@ require '../vendor/autoload.php';
 use \Slim\Slim,
 	\Slim\Extras\Views\Mustache,
 	\Krusty\Service\OrderService,
-	\Krusty\Service\CustomerService;
+	\Krusty\Service\CustomerService,
+	\Krusty\Service\RecipieService;
 
 // Set dir for template engine
 Mustache::$mustacheDirectory = __DIR__ . '/../vendor/mustache/mustache/src/Mustache/';
@@ -19,6 +20,7 @@ $app = new Slim($appArray);
 // Init services
 $orderService = new OrderService();
 $customerService = new CustomerService();
+$recipieService = new RecipieService();
 //...
 
 // Define the index route
@@ -50,7 +52,13 @@ $app->get('/customers', function() use ($app, $customerService) {
 	}
 });
 
-// Define more routes
+$app->get('/recipies/:cookie', function ($cookie) use ($app, $recipieService) {
+	if( ($recipie = $recipieService->fetchRecipie($cookie)) != null ){
+	var_dump($recipie);
+	}else{
+		print 'Recipie not found!';
+	}
+});
 // ...
 
 $app->run();
