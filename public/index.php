@@ -6,7 +6,8 @@ use \Slim\Slim,
 	\Slim\Extras\Views\Mustache,
 	\Krusty\Service\OrderService,
 	\Krusty\Service\CustomerService,
-	\Krusty\Service\RecipieService;
+	\Krusty\Service\RecipieService,
+	\Krusty\Service\CookieService;
 
 // Set dir for template engine
 Mustache::$mustacheDirectory = __DIR__ . '/../vendor/mustache/mustache/src/Mustache/';
@@ -21,6 +22,7 @@ $app = new Slim($appArray);
 $orderService = new OrderService();
 $customerService = new CustomerService();
 $recipieService = new RecipieService();
+$cookieService = new CookieService();
 //...
 
 // Define the index route
@@ -52,6 +54,7 @@ $app->get('/customers', function() use ($app, $customerService) {
 	}
 });
 
+// List a recipie
 $app->get('/recipies/:cookie', function ($cookie) use ($app, $recipieService) {
 	if( ($recipie = $recipieService->fetchRecipie($cookie)) != null ){
 	var_dump($recipie);
@@ -59,6 +62,17 @@ $app->get('/recipies/:cookie', function ($cookie) use ($app, $recipieService) {
 		print 'Recipie not found!';
 	}
 });
+
+//List all Cookies
+
+$app->get('/cookies', function() use ($app, $cookieService){
+	//get cookie from cookie service
+	if(($cookies = $cookieService-> fetchCookies()) != null){
+		var_dump($cookies);	
+	}
+});
+
+// Define more routes
 // ...
 
 $app->run();
