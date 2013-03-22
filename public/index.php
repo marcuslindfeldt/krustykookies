@@ -82,6 +82,14 @@ $app->get('/cookies/:cookie', function($cookie) use ($app, $cookieService){
 	}
 });
 
+// List all ingredients
+$app->get('/ingredients', function() use ($app, $ingredientService) {
+	// get ingredients from ingredient service
+	if( ($ingredients = $ingredientService->fetchIngredients()) != null){
+		var_dump($ingredients);
+	}
+});
+
 // Define more routes
 // ...
 
