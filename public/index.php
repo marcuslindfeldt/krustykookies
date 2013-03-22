@@ -7,7 +7,7 @@ use \Slim\Slim,
 	\Krusty\Service\OrderService,
 	\Krusty\Service\CustomerService,
 	\Krusty\Service\RecipieService,
-	\Krusty\Service\CookieService
+	\Krusty\Service\CookieService,
 	\Krusty\Service\IngredientService;
 
 // Set dir for template engine
