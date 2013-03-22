@@ -8,7 +8,9 @@ use \Slim\Slim,
 	\Krusty\Service\CustomerService,
 	\Krusty\Service\RecipieService,
 	\Krusty\Service\CookieService,
-	\Krusty\Service\IngredientService;
+	\Krusty\Service\IngredientService,
+	\Krusty\Service\PalletService,
+	\Krusty\Service\BlockedService;
 
 // Set dir for template engine
 Mustache::$mustacheDirectory = __DIR__ . '/../vendor/mustache/mustache/src/Mustache/';
@@ -23,8 +25,10 @@ $app = new Slim($appArray);
 $orderService = new OrderService();
 $customerService = new CustomerService();
 $recipieService = new RecipieService();
+$palletService = new PalletService();
 $cookieService = new CookieService();
 $ingredientService = new IngredientService();
+$blockedService = new BlockedService();
 //...
 
 // Define the index route
@@ -74,6 +78,15 @@ $app->get('/cookies', function() use ($app, $cookieService){
 	}
 });
 
+
+// List produced pallets
+$app->get('/pallets', function() use ($app, $palletService){
+	//get cookie from cookie service
+	if(($pallets = $palletService->fetchProducedPallets()) != null){
+		var_dump($pallets);	
+	}
+});
+
 $app->get('/cookies/:cookie', function($cookie) use ($app, $cookieService){
 	
 	//get cookie from cookie service
@@ -87,6 +100,13 @@ $app->get('/ingredients', function() use ($app, $ingredientService) {
 	// get ingredients from ingredient service
 	if( ($ingredients = $ingredientService->fetchIngredients()) != null){
 		var_dump($ingredients);
+	}
+});
+		
+$app->get('/blocked', function() use ($app, $blockedService){
+	if(($blocked = $blockedService->fetchBlocked()) != null){
+	
+		var_dump($blocked);
 	}
 });
 
