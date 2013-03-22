@@ -26,7 +26,9 @@ class CustomerMapper extends AbstractMapper
 			return $db->query($sql)->fetchAll(\PDO::FETCH_CLASS, "\Krusty\Model\Customer");
 		}
 		$stmt = $db->prepare($sql . ' WHERE order_id = :id');
-		$stmt->execute(['id' => $id]);
+		$arr=array();
+		$arr['id']=$id;
+		$stmt->execute($arr);
 		return $stmt->fetchAll(\PDO::FETCH_CLASS, "\Krusty\Model\Customer");
 	}
 }

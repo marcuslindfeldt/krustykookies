@@ -19,7 +19,7 @@ class IngredientMapper extends AbstractMapper
 		
 		$stmt = $db->prepare($sql . ' WHERE ingredient = :ingredient');
 		
-		$stmt->execute(['ingredient' => $ingredient]);
+		$stmt->execute(array('ingredient' => $ingredient));
 		return $stmt->fetchAll(\PDO::FETCH_CLASS, "\Krusty\Model\Ingredient");
 
 	}

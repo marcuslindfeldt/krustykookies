@@ -7,8 +7,9 @@ use \Slim\Slim,
 	\Krusty\Service\OrderService,
 	\Krusty\Service\CustomerService,
 	\Krusty\Service\RecipieService,
-	\Krusty\Service\CookieService
-	\Krusty\Service\IngredientService;
+	\Krusty\Service\CookieService,
+	\Krusty\Service\IngredientService,
+	\Krusty\Service\BlockedService;
 
 // Set dir for template engine
 Mustache::$mustacheDirectory = __DIR__ . '/../vendor/mustache/mustache/src/Mustache/';
@@ -25,6 +26,7 @@ $customerService = new CustomerService();
 $recipieService = new RecipieService();
 $cookieService = new CookieService();
 $ingredientService = new IngredientService();
+$blockedService = new BlockedService();
 //...
 
 // Define the index route
@@ -79,6 +81,13 @@ $app->get('/cookies/:cookie', function($cookie) use ($app, $cookieService){
 	//get cookie from cookie service
 	if(($cookies = $cookieService->fetchCookies($cookie)) != null){	
 		var_dump($cookies);	
+	}
+});
+
+$app->get('/blocked', function() use ($app, $blockedService){
+	if(($blocked = $blockedService->fetchBlocked()) != null){
+	
+		var_dump($blocked);
 	}
 });
 
