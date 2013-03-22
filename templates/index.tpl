@@ -6,5 +6,7 @@
 </head>
 <body>
 	<p>index page</p>
+	<ul>
+	</ul>
 </body>
 </html>

@@ -4,7 +4,8 @@ require '../vendor/autoload.php';
 
 use \Slim\Slim,
 	\Slim\Extras\Views\Mustache,
-	\Krusty\Service\OrderService;
+	\Krusty\Service\OrderService,
+	\Krusty\Service\CustomerService;
 
 // Set dir for template engine
 Mustache::$mustacheDirectory = __DIR__ . '/../vendor/mustache/mustache/src/Mustache/';
@@ -18,6 +19,7 @@ $app = new Slim([
 
 // Init services
 $orderService = new OrderService();
+$customerService = new CustomerService();
 //...
 
 
@@ -39,6 +41,14 @@ $app->get('/orders/:id', function($id) use ($app, $orderService) {
 	// get orders from order service
 	if( ($order = $orderService->fetchOrders($id)) != null ){
 	var_dump($order);
+	}
+});
+
+// List all customers
+$app->get('/customers', function() use ($app, $customerService) {
+	// get orders from order service
+	if( ($customers = $customerService->fetchCustomers()) != null ){
+	var_dump($customers);
 	}
 });
 

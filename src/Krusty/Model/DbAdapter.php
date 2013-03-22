@@ -3,6 +3,7 @@ namespace Krusty\Model;
 
 /**
  * Singleton DbAdapter
+ *
  */
 class DbAdapter
 {
@@ -10,6 +11,10 @@ class DbAdapter
 
 	private $db;
 
+	/**
+	 * Create a connection to the database
+	 * and store it in the global space.
+	 */
 	private function __construct()
 	{
 		$dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';';
@@ -19,6 +24,10 @@ class DbAdapter
     	$this->db = $db;
 	}
 
+	/**
+	 * Retrieve DbAdapter instance
+	 * @return [type] [description]
+	 */
 	public static function instance()	
 	{
 		if(!self::$instance) {
@@ -28,6 +37,11 @@ class DbAdapter
 		return self::$instance;
 	}
 
+	/**
+	 * 
+	 * Fetch the DAO (Data access object)
+	 * @return \PDO The pdo object
+	 */
 	public function getAdapter()
 	{
 		return $this->db;

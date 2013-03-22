@@ -2,21 +2,10 @@
 
 namespace Krusty\Model;
 
-use Krusty\Model\Customer;
-
 class Order
 {
-	private $id;
-	private $customer;
-
-	public function toArray()
-	{
-		# code...
-	}
-
-	public function toJson()
-	{
-		# code...
-	}
-
+	public $order_id;
+	public $customer;
+	public $deadline;
+	public $delivered;
 }
