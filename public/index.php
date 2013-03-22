@@ -9,6 +9,7 @@ use \Slim\Slim,
 	\Krusty\Service\RecipieService,
 	\Krusty\Service\CookieService,
 	\Krusty\Service\IngredientService,
+	\Krusty\Service\PalletService,
 	\Krusty\Service\BlockedService;
 
 // Set dir for template engine
@@ -24,6 +25,7 @@ $app = new Slim($appArray);
 $orderService = new OrderService();
 $customerService = new CustomerService();
 $recipieService = new RecipieService();
+$palletService = new PalletService();
 $cookieService = new CookieService();
 $ingredientService = new IngredientService();
 $blockedService = new BlockedService();
@@ -73,6 +75,15 @@ $app->get('/cookies', function() use ($app, $cookieService){
 	//get cookie from cookie service
 	if(($cookies = $cookieService-> fetchCookies()) != null){
 		var_dump($cookies);	
+	}
+});
+
+
+// List produced pallets
+$app->get('/pallets', function() use ($app, $palletService){
+	//get cookie from cookie service
+	if(($pallets = $palletService->fetchProducedPallets()) != null){
+		var_dump($pallets);	
 	}
 });
 
