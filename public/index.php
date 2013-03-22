@@ -6,6 +6,7 @@ use \Slim\Slim,
 	\Slim\Extras\Views\Mustache,
 	\Krusty\Service\OrderService,
 	\Krusty\Service\CustomerService,
+	\Krusty\Service\RecipieService,
 	\Krusty\Service\CookieService;
 
 // Set dir for template engine
@@ -20,6 +21,7 @@ $app = new Slim($appArray);
 // Init services
 $orderService = new OrderService();
 $customerService = new CustomerService();
+$recipieService = new RecipieService();
 $cookieService = new CookieService();
 //...
 
@@ -49,6 +51,15 @@ $app->get('/customers', function() use ($app, $customerService) {
 	// get orders from order service
 	if( ($customers = $customerService->fetchCustomers()) != null ){
 	var_dump($customers);
+	}
+});
+
+// List a recipie
+$app->get('/recipies/:cookie', function ($cookie) use ($app, $recipieService) {
+	if( ($recipie = $recipieService->fetchRecipie($cookie)) != null ){
+	var_dump($recipie);
+	}else{
+		print 'Recipie not found!';
 	}
 });
 
