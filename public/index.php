@@ -45,10 +45,20 @@ $app->get('/orders', function() use ($app, $orderService) {
 });
 
 // List information about a specific order
-$app->get('/orders/:id', function($id) use ($app, $orderService) {
+$app->get('/orders/:id', function($id) use ($app, $orderService, $palletService) {
 	// get orders from order service
 	if( ($order = $orderService->fetchOrders($id)) != null ){
-	var_dump($order);
+		$orderedPallets = $palletService->fetchOrderedPallets($order);
+
+		var_dump($order);
+		if(count($orderedPallets) <= 0){
+			print "Woops, an order for nothing";
+		}else{
+			var_dump($orderedPallets);
+		}
+
+	}else{
+		print "Could not find order with order id: " . $id;
 	}
 });
 
@@ -96,8 +106,7 @@ $app->get('/cookies/:cookie', function($cookie) use ($app, $cookieService){
 });
 
 $app->get('/blocked', function() use ($app, $blockedService){
-	if(($blocked = $blockedService->fetchBlocked()) != null){
-	
+	if(($blocked = $blockedService->fetchBlocked()) != null){	
 		var_dump($blocked);
 	}
 });
