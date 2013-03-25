@@ -74,23 +74,31 @@ $app->get('/customers', function() use ($app, $customerService) {
 	$app->render('footer.tpl');	
 });
 
-// List a recipie
-$app->get('/recipies/:cookie', function ($cookie) use ($app, $recipieService) {
-	if( ($recipie = $recipieService->fetchRecipie($cookie)) != null ){
-	var_dump($recipie);
-	}else{
-		print 'Recipie not found!';
-	}
-});
 
 //List all Cookies
-$app->get('/cookies', function() use ($app, $cookieService){
-	//get cookie from cookie service
-	if(($cookies = $cookieService-> fetchCookies()) != null){
-		var_dump($cookies);	
-	}
+$app->get('/products', function() use ($app, $cookieService, $ingredientService){
+	//get cookie array from cookie service
+	$cookies = $cookieService-> fetchCookies();
+	$ingredients = $ingredientService->fetchIngredients();
+	// var_dump($ingredients);	
+	$app->render('header.tpl');
+	$app->render('products.tpl', 
+			array('cookies' => $cookies,
+				  'ingredients' => $ingredients));
+	$app->render('footer.tpl');	
 });
 
+
+// List a recipie
+$app->get('/products/:id', function ($id) use ($app, $recipieService) {
+	$cookie = urldecode($id);
+	if( ($recipie = $recipieService->fetchRecipie($cookie)) == null ){
+		//Not found, redirect to 404
+		$app->notFound();
+	}
+
+	var_dump($recipie);
+});
 
 // List all pallets in storage, and their status
 $app->get('/pallets', function() use ($app, $palletService){
@@ -100,13 +108,7 @@ $app->get('/pallets', function() use ($app, $palletService){
 	}
 });
 
-$app->get('/cookies/:cookie', function($cookie) use ($app, $cookieService){
-	
-	//get cookie from cookie service
-	if(($cookies = $cookieService->fetchCookies($cookie)) != null){	
-		var_dump($cookies);	
-	}
-});
+
 
 // List all ingredients
 $app->get('/ingredients', function() use ($app, $ingredientService) {
