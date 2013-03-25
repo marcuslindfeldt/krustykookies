@@ -32,4 +32,16 @@ class BlockedMapper extends AbstractMapper
 			return 0;
 		}
 	}
+	public function unblock($cookie, $start, $end){
+		try {
+			if($cookie != null && $end!=null){
+				$db = $this->getAdapter();
+				$sql = 'DELETE FROM Blocked ';
+				$stmt = $db->prepare($sql . 'where cookie=:cookie and  start=:start and end=:end');
+				return $stmt->execute(array('cookie' => $cookie, 'start'=> $start, 'end' => $end));
+			}
+		}catch (Exception $e){
+			return 0;
+		}
+	}
 }
