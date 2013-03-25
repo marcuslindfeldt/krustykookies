@@ -12,6 +12,7 @@
 				<li><a href="/orders">Orders</a></li>
 				<li><a href="/products">Products</a></li>
 				<li><a href="/customers">Customers</a></li>
+				<li><a href="/ingredients">Ingredients</a></li>
 			</ul>
 		</nav>
 	</header>

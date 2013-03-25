@@ -113,9 +113,12 @@ $app->get('/pallets', function() use ($app, $palletService){
 // List all ingredients
 $app->get('/ingredients', function() use ($app, $ingredientService) {
 	// get ingredients from ingredient service
+	$app->render('header.tpl');
 	if( ($ingredients = $ingredientService->fetchIngredients()) != null){
-		var_dump($ingredients);
+// 		var_dump($ingredients);
+		$app->render('ingredient_details.tpl', array('ingredients' => $ingredients));
 	}
+	$app->render('footer.tpl');
 });
 		
 $app->get('/blocked', function() use ($app, $blockedService){

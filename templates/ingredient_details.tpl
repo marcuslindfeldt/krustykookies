@@ -1,0 +1,19 @@
+<table>
+<thead>
+	<tr>
+		<th>Ingredient</th>
+		<th>Quantity</th>
+		<th>Modified</th>
+	</tr>
+</thead>	
+<tbody>
+{{#ingredients}}
+		<tr>
+			<td>{{ingredient}}</td>
+			<td>{{quantity}}</td>
+			<td>{{modified}}</td>
+		</tr>
+{{/ingredients}}
+</tbody>
+</table>
+<br />
