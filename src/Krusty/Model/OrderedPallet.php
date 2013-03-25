@@ -4,7 +4,7 @@ namespace Krusty\Model;
 
 class OrderedPallet
 {
-	private $order_id;
-	private $cookie;
-	private $quantity;
+	public $order_id;
+	public $cookie;
+	public $quantity;
 }

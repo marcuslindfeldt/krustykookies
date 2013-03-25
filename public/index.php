@@ -33,41 +33,45 @@ $blockedService = new BlockedService();
 
 // Define the index route
 $app->get('/', function () use ($app) {
+	$app->render('header.tpl');
 	$app->render('index.tpl');
+	$app->render('footer.tpl');
 });
 
 // List all orders
 $app->get('/orders', function() use ($app, $orderService) {
 	// get orders from order service
-	if( ($orders = $orderService->fetchOrders()) != null ){
-	var_dump($orders);
-	}
+	$orders = $orderService->fetchOrders();
+	$app->render('header.tpl');
+	$app->render('orders.tpl', array('orders' => $orders));
+	$app->render('footer.tpl');
 });
 
 // List information about a specific order
 $app->get('/orders/:id', function($id) use ($app, $orderService, $palletService) {
 	// get orders from order service
-	if( ($order = $orderService->fetchOrders($id)) != null ){
-		$orderedPallets = $palletService->fetchOrderedPallets($order);
-
-		var_dump($order);
-		if(count($orderedPallets) <= 0){
-			print "Woops, an order for nothing";
-		}else{
-			var_dump($orderedPallets);
-		}
-
-	}else{
-		print "Could not find order with order id: " . $id;
+	if( ($order = $orderService->fetchOrders($id)) == null ){
+		//Not found, redirect to 404
+		$app->notFound();
 	}
+	$orderedPallets = $palletService->fetchOrderedPallets($order);
+
+	$app->render('header.tpl');
+	$app->render('order_details.tpl', 
+			array('order' => $order,
+  				  'pallets' => $orderedPallets));
+	$app->render('footer.tpl');	
 });
 
 // List all customers
 $app->get('/customers', function() use ($app, $customerService) {
-	// get orders from order service
-	if( ($customers = $customerService->fetchCustomers()) != null ){
-	var_dump($customers);
-	}
+	// fetch customers
+	$customers = $customerService->fetchCustomers();
+	// render customer page
+	$app->render('header.tpl');
+	$app->render('customers.tpl', 
+			array('customers' => $customers));
+	$app->render('footer.tpl');	
 });
 
 // List a recipie
@@ -80,7 +84,6 @@ $app->get('/recipies/:cookie', function ($cookie) use ($app, $recipieService) {
 });
 
 //List all Cookies
-
 $app->get('/cookies', function() use ($app, $cookieService){
 	//get cookie from cookie service
 	if(($cookies = $cookieService-> fetchCookies()) != null){
@@ -89,7 +92,7 @@ $app->get('/cookies', function() use ($app, $cookieService){
 });
 
 
-// List produced pallets
+// List all pallets in storage, and their status
 $app->get('/pallets', function() use ($app, $palletService){
 	//get cookie from cookie service
 	if(($pallets = $palletService->fetchProducedPallets()) != null){

@@ -1,12 +1,1 @@
-<!doctype html>
-<html>
-<head>
-	<meta charset="UTF-8">
-	<title>Krusty Kookies</title>
-</head>
-<body>
-	<p>index page</p>
-	<ul>
-	</ul>
-</body>
-</html>
+<p> What's up duck! </p>

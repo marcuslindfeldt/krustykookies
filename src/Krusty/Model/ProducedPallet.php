@@ -4,8 +4,8 @@ namespace Krusty\Model;
 
 class ProducedPallet
 {
-	private $pallet_id;
-	private $order_id;
-	private $cookie;
-	private $produced;
+	public $pallet_id;
+	public $order_id;
+	public $cookie;
+	public $produced;
 }
