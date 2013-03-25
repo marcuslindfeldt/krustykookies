@@ -4,6 +4,7 @@ require '../vendor/autoload.php';
 
 use \Slim\Slim,
 	\Slim\Extras\Views\Mustache,
+	\Slim\Middleware\SessionCookie,
 	\Krusty\Service\OrderService,
 	\Krusty\Service\CustomerService,
 	\Krusty\Service\RecipieService,
@@ -20,6 +21,7 @@ $appArray=array();
 $appArray['view']=new Mustache();
 $appArray['templates.path']=TEMPLATE_DIR;
 $app = new Slim($appArray);
+$app->add(new SessionCookie());
 
 // Init services
 $orderService = new OrderService();
@@ -76,28 +78,46 @@ $app->get('/customers', function() use ($app, $customerService) {
 
 
 //List all Cookies
-$app->get('/products', function() use ($app, $cookieService, $ingredientService){
+$app->get('/cookies', function() use ($app, $cookieService, $ingredientService){
 	//get cookie array from cookie service
 	$cookies = $cookieService-> fetchCookies();
 	$ingredients = $ingredientService->fetchIngredients();
 	// var_dump($ingredients);	
 	$app->render('header.tpl');
-	$app->render('products.tpl', 
+	$app->render('cookies.tpl', 
 			array('cookies' => $cookies,
 				  'ingredients' => $ingredients));
 	$app->render('footer.tpl');	
 });
 
+$app->post('/cookies', function() use ($app, $recipieService) {
+	// Get the post data
+	$data = $app->request()->post();
+	// Add cookie, create flash message
+	if($recipieService->addRecipie($data)){
+		$app->flash('success', 'You successfully added a new cookie!');
+	}else{
+		// maybe catch exception instead and show more
+		// descriptive message to the user
+		$app->flash('error', 'Oops, something went wrong. Please try again!');
+	}
+	// redirect to show flash message
+	$app->redirect('/cookies');
+});
+
 
 // List a recipie
-$app->get('/products/:id', function ($id) use ($app, $recipieService) {
+$app->get('/cookies/:id', function ($id) use ($app, $recipieService) {
 	$cookie = urldecode($id);
 	if( ($recipie = $recipieService->fetchRecipie($cookie)) == null ){
 		//Not found, redirect to 404
 		$app->notFound();
 	}
 
-	var_dump($recipie);
+	$app->render('header.tpl');
+	$app->render('cookie_details.tpl', 
+			array('recipie' => $recipie));
+	$app->render('footer.tpl');	
 });
 
 // List all pallets in storage, and their status
@@ -107,8 +127,6 @@ $app->get('/pallets', function() use ($app, $palletService){
 		var_dump($pallets);	
 	}
 });
-
-
 
 // List all ingredients
 $app->get('/ingredients', function() use ($app, $ingredientService) {
