@@ -12,6 +12,9 @@
 				<li><a href="/orders">Orders</a></li>
 				<li><a href="/cookies">Cookies</a></li>
 				<li><a href="/customers">Customers</a></li>
+				<li><a href="/ingredients">Ingredients</a></li>
+				<li><a href="/blocked">Blocking cookies</a></li>
+				<li><a href="/pallets">Pallets</a></li>
 			</ul>
 		</nav>
 	</header>

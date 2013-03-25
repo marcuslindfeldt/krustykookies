@@ -17,7 +17,8 @@ CREATE TABLE Ingredients (
     `ingredient` VARCHAR(64),
     `quantity` BIGINT UNSIGNED NOT NULL,
     `description` VARCHAR(255) DEFAULT '',
-    `modified` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `modified` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `lastAddition` BIGINT UNSIGNED NOT NULL,
     PRIMARY KEY(`ingredient`)
 );
 
@@ -87,26 +88,26 @@ INSERT INTO Cookies (`cookie`) VALUES
 ('Almond delight'),
 ('Berliner');
 
-INSERT INTO Ingredients (`ingredient`, `quantity`) VALUES
-('Butter', 10000),
-('Sugar', 10000),
-('Chopped almonds', 10000),
-('Flour', 10000),
-('Cinnamon', 10000),
-('Icing sugar', 10000),
-('Eggs', 10000),
-('Vanilla sugar', 10000),
-('Chocolate', 10000),
-('Vanilla', 10000),
-('Sodium bicarbonate', 10000),
-('Wheat flour', 10000),
-('Potato starch', 10000),
-('Marzipan', 10000),
-('Egg whites', 10000),
-('Bread crumbs', 10000),
-('Fine-ground nuts', 10000),
-('Ground, roasted nuts', 10000),
-('Roasted, chopped nuts', 10000);
+INSERT INTO Ingredients (`ingredient`, `quantity`, `lastAddition`) VALUES
+('Butter', 10000, 10000),
+('Sugar', 10000, 10000),
+('Chopped almonds', 10000, 10000),
+('Flour', 10000, 10000),
+('Cinnamon', 10000, 10000),
+('Icing sugar', 10000, 10000),
+('Eggs', 10000, 10000),
+('Vanilla sugar', 10000, 10000),
+('Chocolate', 10000, 10000),
+('Vanilla', 10000, 10000),
+('Sodium bicarbonate', 10000, 10000),
+('Wheat flour', 10000, 10000),
+('Potato starch', 10000, 10000),
+('Marzipan', 10000, 10000),
+('Egg whites', 10000, 10000),
+('Bread crumbs', 10000, 10000),
+('Fine-ground nuts', 10000, 10000),
+('Ground, roasted nuts', 10000, 10000),
+('Roasted, chopped nuts', 10000, 10000);
 
 INSERT INTO Recipies VALUES
 ('Nut ring', 'Flour', 450),

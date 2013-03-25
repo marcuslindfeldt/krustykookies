@@ -8,4 +8,5 @@ class Ingredient
 	public $quantity;
 	public $description;
 	public $modified;
+	public $lastAddition;
 }
