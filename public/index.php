@@ -96,10 +96,30 @@ $app->get('/cookies/:cookie', function($cookie) use ($app, $cookieService){
 });
 
 $app->get('/blocked', function() use ($app, $blockedService){
+	print "<p>Block cookies:</p><hr>";
 	if(($blocked = $blockedService->fetchBlocked()) != null){
-	
-		var_dump($blocked);
+		for($i=0;$i<count($blocked);$i++){
+			echo "<p><dd>";
+			echo  $blocked[$i]->cookie."<br>";
+			echo "from: ".$blocked[$i]->start."<br>";
+			echo "until: ".$blocked[$i]->end."<br>"; 
+			echo "</p></dd><hr>";
+		}
 	}
+	$app->render('block.tpl');
+});
+
+
+$app->post('/blocked', function() use ($app, $blockedService){
+    $cookie=$app->request()->post('cookie');
+    $end= $app->request()->post('end');
+	if(($blocked = $blockedService->block($cookie, $end)) != null){
+		$app->redirect('/blocked');
+		//print "blocking ".$cookie." until ".$end;
+	}else{
+		print "block failed!";
+	}
+	
 });
 
 // Define more routes
