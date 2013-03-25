@@ -122,6 +122,7 @@ $app->get('/ingredients', function() use ($app, $ingredientService) {
 });
 		
 $app->get('/blocked', function() use ($app, $blockedService){
+	$app->render('header.tpl');
 	print "<p>Block cookies:</p><hr>";
 	if(($blocked = $blockedService->fetchBlocked()) != null){
 		echo "<form action='/unblock' method='POST'>";
