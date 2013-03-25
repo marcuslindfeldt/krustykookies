@@ -9,7 +9,7 @@ class IngredientService
 	private $model;
 	private $mapper;
 
-	public function fetchIngredients($ingredient)
+	public function fetchIngredients($ingredient = null)
 	{
 		$mapper = $this->getMapper();
 		return $mapper->fetch($ingredient);

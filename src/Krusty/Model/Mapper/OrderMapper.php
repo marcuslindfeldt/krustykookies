@@ -53,7 +53,8 @@ class OrderMapper extends AbstractMapper
 		}
 		$stmt = $db->prepare($sql . ' WHERE order_id = :id');
 		$stmt->execute(array('id' => $id));
-		return $stmt->fetchAll(\PDO::FETCH_CLASS, "\Krusty\Model\Order");
+		$stmt->setFetchMode(\PDO::FETCH_CLASS, "\Krusty\Model\Order");
+		return $stmt->fetch();
 
 	}
 }
