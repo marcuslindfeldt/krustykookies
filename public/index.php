@@ -134,6 +134,7 @@ $app->get('/blocked', function() use ($app, $blockedService){
 			echo " <input type=\"submit\" value=\"Unblock now\" name=\"unblock".$i."\"/>";
 			echo "</p></dd><hr>";
 		}
+		echo("</form>");
 	}
 	$app->render('block.tpl');
 });
@@ -151,8 +152,8 @@ $app->post('/unblock', function() use ($app, $blockedService){
 
 $app->post('/blocked', function() use ($app, $blockedService){
 
-	  $cookie=$app->request()->post('cookie');
-    	$end= $app->request()->post('end');
+	$cookie=$app->request()->post('cookie');
+	$end= $app->request()->post('end');
 		if(($blocked = $blockedService->block($cookie, $end)) != null){
 			$app->redirect('/blocked');
 			//print "blocking ".$cookie." until ".$end;
