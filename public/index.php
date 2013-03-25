@@ -102,20 +102,21 @@ $app->get('/products/:id', function ($id) use ($app, $recipieService) {
 
 // List all pallets in storage, and their status
 $app->get('/pallets', function() use ($app, $palletService){
+	$app->render('header.tpl');
 	//get cookie from cookie service
 	if(($pallets = $palletService->fetchProducedPallets()) != null){
-		var_dump($pallets);	
+		$app->render('pallets.tpl', array('pallets' => $pallets));
 	}
+	$app->render('footer.tpl');
 });
 
 
 
 // List all ingredients
 $app->get('/ingredients', function() use ($app, $ingredientService) {
-	// get ingredients from ingredient service
 	$app->render('header.tpl');
+	// get ingredients from ingredient service
 	if( ($ingredients = $ingredientService->fetchIngredients()) != null){
-// 		var_dump($ingredients);
 		$app->render('ingredient_details.tpl', array('ingredients' => $ingredients));
 	}
 	$app->render('footer.tpl');

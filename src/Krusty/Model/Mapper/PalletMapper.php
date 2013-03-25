@@ -20,7 +20,8 @@ class PalletMapper extends AbstractMapper
 	public function fetchProducedPallets()
 	{
 		$db = $this->getAdapter();
-		$sql = 'SELECT * FROM ProducedPallets';
+		$sql = 'SELECT * FROM ProducedPallets left join Orders using(order_id)';
+// 		$sql = 'SELECT * FROM ProducedPallets';
 		$stmt = $db->prepare($sql);
 		$stmt->execute();
 		return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Krusty\Model\ProducedPallet');
