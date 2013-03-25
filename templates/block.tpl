@@ -9,7 +9,7 @@
 	<p>Block another cookie here:</p>
 	<ul>
 	</ul>
-	<form action="/blocked" method="POST">
+<form action="/blocked" method="POST">
    Cookie name: 						<input type="text" name="cookie" id="cookie" />
    <br>
    Block until('yyyy-mm-dd hh:mm:ss'): 	<input type="text" name="end" id="end" />
