@@ -3,8 +3,8 @@
 	<tr>
 		<th>Ingredient</th>
 		<th>Quantity</th>
-		<th>Modified</th>
-		<th>Last addition</th>
+		<th>Last delivery date</th>
+		<th>Last delivery amount</th>
 	</tr>
 </thead>	
 <tbody>
@@ -13,7 +13,7 @@
 			<td>{{ingredient}}</td>
 			<td>{{quantity}}</td>
 			<td>{{modified}}</td>
-			<td style="padding: 20px;">{{lastAddition}}</td>
+			<td>{{lastAddition}}</td>
 		</tr>
 {{/ingredients}}
 </tbody>
