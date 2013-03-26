@@ -13,7 +13,18 @@ class RecipieService
 	{
 		$mapper = $this->getMapper();
 		//validate $cookie
-		return $mapper->fetchRecipie($cookie);
+		return $mapper->fetch($cookie);
+	}
+
+	public function addRecipie(array $data)
+	{
+		$mapper = $this->getMapper();
+		$model = $this->getModel();
+		//validate post data..
+
+		//build model
+		$model->fromArray($data);
+		return $mapper->save($model);
 	}
 
 	/**
@@ -22,7 +33,7 @@ class RecipieService
 	 */
 	public function getModel()
 	{
-		if(is_null($model)) {
+		if(is_null($this->model)) {
 			$this->model = new Recipie();
 		}
 		return $this->model;
