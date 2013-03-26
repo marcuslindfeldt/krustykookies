@@ -18,9 +18,9 @@ class BlockedService
 		$mapper=$this->getMapper();
 		return $mapper->block($cookie, $end);
 	}
-	public function unblock($cookie, $start, $end){
+	public function unblock($blocked_id){
 		$mapper=$this->getMapper();
-		return $mapper->unblock($cookie, $start, $end);
+		return $mapper->unblock($blocked_id);
 	}
 	/**
 	 * Lazy load model

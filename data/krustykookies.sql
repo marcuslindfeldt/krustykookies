@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS Recipies;
-DROP TABLE IF EXISTS Pallets;
+DROP TABLE IF EXISTS ProducedPallets;
 DROP TABLE IF EXISTS Blocked;
 DROP TABLE IF EXISTS OrderedPallets;
 DROP TABLE IF EXISTS Cookies;
@@ -61,7 +61,7 @@ CREATE TABLE OrderedPallets (
 -- made that enough pallets are in stock & reserved for
 -- that specific order. if so then delivered field in
 -- Orders are set. 
-CREATE TABLE Pallets (
+CREATE TABLE ProducedPallets (
     `pallet_id` SERIAL,
     `order_id` BIGINT UNSIGNED,
     `cookie` VARCHAR(64) NOT NULL,
@@ -73,11 +73,13 @@ CREATE TABLE Pallets (
 
     
 CREATE TABLE Blocked (
-    `cookie` VARCHAR(64),
+    `blocked_id` SERIAL,
+    `cookie` VARCHAR(64) NOT NULL,
     `start` DATETIME NOT NULL,
     `end` DATETIME NOT NULL,
+	UNIQUE index(`cookie`, `start`, `end`),
     FOREIGN KEY (`cookie`) REFERENCES Cookies (`cookie`),
-    PRIMARY KEY (`cookie`, `start`, `end`)
+    PRIMARY KEY (`blocked_id`)
 );
 
 INSERT INTO Cookies (`cookie`) VALUES
@@ -143,7 +145,7 @@ INSERT INTO Recipies VALUES
 ('Berliner', 'Chocolate', 50 );
 
 INSERT INTO Blocked VALUES
-('Nut ring', NOW(), NOW() + INTERVAL 1 DAY);
+(NULL, 'Nut ring', NOW(), NOW() + INTERVAL 1 DAY);
 
 INSERT INTO Customers VALUES
 ('Finkakor AB', 'Helsingborg'),
@@ -167,7 +169,7 @@ INSERT INTO OrderedPallets VALUES
 (1, 'Berliner', 2);
 
 -- produce some yummy cookies
-INSERT INTO Pallets VALUES
+INSERT INTO ProducedPallets VALUES
 (NULL, NULL, 'Nut ring', NOW()),
 (NULL, NULL, 'Nut ring', NOW() + INTERVAL 4 DAY),
 (NULL, NULL, 'Nut ring', NOW() + INTERVAL 4 DAY),

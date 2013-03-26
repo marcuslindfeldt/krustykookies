@@ -123,30 +123,17 @@ $app->get('/ingredients', function() use ($app, $ingredientService) {
 		
 $app->get('/blocked', function() use ($app, $blockedService){
 	$app->render('header.tpl');
-	print "<p>Block cookies:</p><hr>";
 	if(($blocked = $blockedService->fetchBlocked()) != null){
-		echo "<form action='/unblock' method='POST'>";
-		for($i=0;$i<count($blocked);$i++){
-			echo "<p><dd>";
-			echo  $blocked[$i]->cookie."<br>";
-			echo "from: ".$blocked[$i]->start."<br>";
-			echo "until: ".$blocked[$i]->end."<br>"; 
-			echo " <input type=\"submit\" value=\"Unblock now\" name=\"unblock".$i."\"/>";
-			echo "</p></dd><hr>";
-		}
-		echo("</form>");
+		$app->render('block_list.tpl', 
+			array('blocks' => $blocked));
 	}
-	$app->render('block.tpl');
+	$app->render('block_cookie.tpl');
 });
 
-$app->post('/unblock', function() use ($app, $blockedService){
-	if(($blocked = $blockedService->fetchBlocked()) != null){
-		for($i=0;$i<count($blocked);$i++){
-			if($app->request()->post("unblock".$i)!=null){
-				$blockedService->unblock($blocked[$i]->cookie, $blocked[$i]->start, $blocked[$i]->end);
-			}
-		}
-	}
+$app->post('/unblock', function() use ($app, $blockedService){ 	
+
+				$blockedService->unblock($app->request()->post("blocked_id"));
+		
 	$app->redirect('/blocked');
 });
 
