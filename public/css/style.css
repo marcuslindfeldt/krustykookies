@@ -1,0 +1,62 @@
+
+
+/* clearfix */
+.group:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+ul {
+	list-style-type: none;
+}
+
+header {
+	clear:both;
+	margin-bottom:30px;
+}
+
+header ul {
+	margin: 30px 0;
+}
+header li {
+	display:inline;
+	float:left;
+	margin-right:20px;
+}
+
+/* Forms */
+label {
+	display: block;
+	font-weight: bold;
+	margin-top: 10px;
+}
+
+/* Tables */
+
+table {
+	display:table;
+	border-collapse: collapse;
+	width:100%;
+	margin-bottom:20px;
+	border-spacing: 2px;
+}
+
+th{
+	font-weight: 700;
+	text-shadow: 0 -1px 0 #ffffff;
+}
+
+td,th {
+	border:1px solid;
+	padding: 6px 3px;
+	text-align: center;
+	border-color: #dddddd #e7e7e7 #dddddd #e7e7e7;
+}
+/* etc */
+
+footer {
+	margin-top:25px;
+	text-align: center;
+}
+

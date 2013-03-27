@@ -1,7 +1,9 @@
 <?php
 namespace Krusty\Model;
 
-class Blocked
+use \Krusty\Model\AbstractModel;
+
+class Blocked extends AbstractModel
 {
 	public $cookie;
 	public $start;

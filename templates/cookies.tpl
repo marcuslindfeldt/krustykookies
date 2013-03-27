@@ -49,8 +49,6 @@
 						<td>
 							<input type="number" name ="ingredients[{{ingredient}}]" min="0" value="0">
 						</td>
-						<td>
-						</td>
 					</tr>
 					{{/ingredients}}
 				</tbody>
