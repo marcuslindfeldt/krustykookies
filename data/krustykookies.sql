@@ -74,8 +74,8 @@ CREATE TABLE ProducedPallets (
 CREATE TABLE Blocked (
     `block_id` SERIAL,
     `cookie` VARCHAR(64) NOT NULL,
-    `start` DATETIME NOT NULL,
-    `end` DATETIME NOT NULL,
+    `start` DATE NOT NULL,
+    `end` DATE NOT NULL,
     UNIQUE (`cookie`, `start`, `end`),
     FOREIGN KEY (`cookie`) REFERENCES Cookies (`cookie`),
     PRIMARY KEY (`block_id`)

@@ -8,15 +8,15 @@ use \Krusty\Model\Blocked,
 class BlockedMapper extends AbstractMapper
 {
 	//fetch all blocks
-	public function fetch($cookie = null)
+	public function fetch($blocked_id = null)
 	{
 		$db = $this->getAdapter();
 		$sql = 'SELECT * FROM Blocked';
-		if($cookie === null) {
+		if($blocked_id === null) {
 			return $db->query($sql)->fetchAll(\PDO::FETCH_CLASS, "\Krusty\Model\Blocked");
 		}
-		$stmt = $db->prepare($sql . ' WHERE cookie = :cookie');
-		$stmt->execute(array('cookie' => $cookie));
+		$stmt = $db->prepare($sql . ' WHERE blocked_id = :blocked_id');
+		$stmt->execute(array('blocked_id' => $blocked_id));
 		return $stmt->fetchAll(\PDO::FETCH_CLASS, "\Krusty\Model\Blocked");
 	}
 
@@ -35,14 +35,13 @@ class BlockedMapper extends AbstractMapper
 		}
 	}
 
-	public function unblock($cookie, $start, $end)
-	{
+	public function unblock($blocked_id){
 		try {
-			if($cookie != null && $end!=null){
+			if($blocked_id != null){
 				$db = $this->getAdapter();
 				$sql = 'DELETE FROM Blocked ';
-				$stmt = $db->prepare($sql . 'where cookie=:cookie and  start=:start and end=:end');
-				return $stmt->execute(array('cookie' => $cookie, 'start'=> $start, 'end' => $end));
+				$stmt = $db->prepare($sql . 'where blocked_id=:blocked_id');
+				return $stmt->execute(array('blocked_id' => $blocked_id));
 			}
 		}catch (\Exception $e){
 			return null;

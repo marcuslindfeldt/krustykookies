@@ -9,10 +9,10 @@ class BlockedService
 	private $model;
 	private $mapper;
 
-	public function fetchBlocked($cookie = null)
+	public function fetchBlocked($block_id = null)
 	{
 		$mapper = $this->getMapper();
-		return $mapper->fetch($cookie);
+		return $mapper->fetch($block_id);
 	}
 	public function block(array $data) {
 		$mapper = $this->getMapper();
@@ -30,9 +30,9 @@ class BlockedService
 		var_dump($model);
 		return $mapper->block($model);
 	}
-	public function unblock($cookie, $start, $end){
+	public function unblock($blocked_id){
 		$mapper=$this->getMapper();
-		return $mapper->unblock($cookie, $start, $end);
+		return $mapper->unblock($blocked_id);
 	}
 	/**
 	 * Lazy load model

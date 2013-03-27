@@ -129,6 +129,19 @@ $app->get('/pallets', function() use ($app, $palletService){
 	}
 	$app->render('footer.tpl');
 });
+$app->get('/pallets/:blocked', function($blocked) use ($app, $blockedService, $palletService){
+	$app->render('header.tpl');
+	$blockedc=$blockedService->fetchBlocked($blocked);
+	$blockingObj=$blockedc[0]; //this is the <Blocked> object
+	
+	//get cookie from cookie service
+	if(($pallets = $palletService->fetchProducedPallets($blockingObj->start, $blockingObj->end, $blockingObj->cookie)) != null){
+			$app->render('pallets.tpl', array('pallets' => $pallets));
+	}else{
+		echo "no pallets concerend by that blocking";
+	}
+	$app->render('footer.tpl');
+});
 
 // List all ingredients
 $app->get('/ingredients', function() use ($app, $ingredientService) {
@@ -145,22 +158,28 @@ $app->get('/blocked', function() use ($app, $cookieService, $blockedService){
 	$blocked = $blockedService->fetchBlocked();
 
 	$app->render('header.tpl');
-	$app->render('block.tpl', array(
+
+	$app->render('block_cookie.tpl', array(
 		'cookies' => $cookies,
 		'blocked' => $blocked
 	));
 	$app->render('footer.tpl');
 });
 
-$app->post('/unblock', function() use ($app, $blockedService){
-	if(($blocked = $blockedService->fetchBlocked()) != null){
-		for($i=0;$i<count($blocked);$i++){
-			if($app->request()->post("unblock".$i)!=null){
-				$blockedService->unblock($blocked[$i]->cookie, $blocked[$i]->start, $blocked[$i]->end);
-			}
-		}
+
+// Varför ska man få unblocka cookies. borde inte blocken släppa vid release date?
+$app->post('/unblock', function() use ($app, $blockedService){ 	
+	if($app->request()->post("ub")!=null){
+		$blockedService->unblock($app->request()->post("blocked_id"));
+		$app->redirect('/blocked');
+	}else if($app->request()->post("vp")!=null){
+		
+		$app->redirect('/pallets/'.$app->request()->post("blocked_id"));
+		//$blockedService->unblock($app->request()->post("blocked_id"));
 	}
-	$app->redirect('/blocked');
+	
+		
+	
 });
 
 $app->post('/blocked', function() use ($app, $blockedService){
