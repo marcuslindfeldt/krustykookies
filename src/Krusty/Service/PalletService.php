@@ -16,10 +16,10 @@ class PalletService
 		return $mapper->fetchOrderedPallets($order);
 	}
 
-	public function fetchProducedPallets()
+	public function fetchProducedPallets($start=null, $end=null, $cookie=null)
 	{
 		$mapper = $this->getMapper();
-		return $mapper->fetchProducedPallets();
+		return $mapper->fetchProducedPallets($start, $end, $cookie);
 	}
 
 

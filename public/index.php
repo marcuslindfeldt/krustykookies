@@ -129,6 +129,19 @@ $app->get('/pallets', function() use ($app, $palletService){
 	}
 	$app->render('footer.tpl');
 });
+$app->get('/pallets/:blocked', function($blocked) use ($app, $blockedService, $palletService){
+	$app->render('header.tpl');
+	$blockedc=$blockedService->fetchBlocked($blocked);
+	$blockingObj=$blockedc[0]; //this is the <Blocked> object
+	
+	//get cookie from cookie service
+	if(($pallets = $palletService->fetchProducedPallets($blockingObj->start, $blockingObj->end, $blockingObj->cookie)) != null){
+			$app->render('pallets.tpl', array('pallets' => $pallets));
+	}else{
+		echo "no pallets concerend by that blocking";
+	}
+	$app->render('footer.tpl');
+});
 
 // List all ingredients
 $app->get('/ingredients', function() use ($app, $ingredientService) {
@@ -150,10 +163,17 @@ $app->get('/blocked', function() use ($app, $blockedService){
 });
 
 $app->post('/unblock', function() use ($app, $blockedService){ 	
-
-				$blockedService->unblock($app->request()->post("blocked_id"));
+	if($app->request()->post("ub")!=null){
+		$blockedService->unblock($app->request()->post("blocked_id"));
+		$app->redirect('/blocked');
+	}else if($app->request()->post("vp")!=null){
 		
-	$app->redirect('/blocked');
+		$app->redirect('/pallets/'.$app->request()->post("blocked_id"));
+		//$blockedService->unblock($app->request()->post("blocked_id"));
+	}
+	
+		
+	
 });
 
 $app->post('/blocked', function() use ($app, $blockedService){

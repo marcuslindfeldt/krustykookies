@@ -8,15 +8,15 @@ use \Krusty\Model\Blocked,
 class BlockedMapper extends AbstractMapper
 {
 	//fetch all blocks
-	public function fetch($cookie = null)
+	public function fetch($blocked_id = null)
 	{
 		$db = $this->getAdapter();
 		$sql = 'SELECT * FROM Blocked';
-		if($cookie === null) {
+		if($blocked_id === null) {
 			return $db->query($sql)->fetchAll(\PDO::FETCH_CLASS, "\Krusty\Model\Blocked");
 		}
-		$stmt = $db->prepare($sql . ' WHERE cookie = :cookie');
-		$stmt->execute(array('cookie' => $cookie));
+		$stmt = $db->prepare($sql . ' WHERE blocked_id = :blocked_id');
+		$stmt->execute(array('blocked_id' => $blocked_id));
 		return $stmt->fetchAll(\PDO::FETCH_CLASS, "\Krusty\Model\Blocked");
 	}
 	public function block($cookie, $end){

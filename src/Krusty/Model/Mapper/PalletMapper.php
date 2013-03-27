@@ -17,13 +17,28 @@ class PalletMapper extends AbstractMapper
 		return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Krusty\Model\OrderedPallet');
 	}
 
-	public function fetchProducedPallets()
+	public function fetchProducedPallets($start=null, $end=null, $cookie=null)
 	{
+		
 		$db = $this->getAdapter();
 		$sql = 'SELECT * FROM ProducedPallets left join Orders using(order_id)';
+		if($start!=null&&$end!=null){
+			$sql.=' where produced>=:start and produced<=:end';
+			if($cookie!=null){
+				$sql.=' and cookie=:cookie';
+				$stmt = $db->prepare($sql);
+				$stmt->execute(array('start' => $start, 'end' => $end, 'cookie' => $cookie));
+			}else{
+				$stmt = $db->prepare($sql);
+				$stmt->execute(array('start' => $start, 'end' => $end));
+			}
+		}else{
+			$stmt = $db->prepare($sql);
+			$stmt->execute();
+		}
+		
 // 		$sql = 'SELECT * FROM ProducedPallets';
-		$stmt = $db->prepare($sql);
-		$stmt->execute();
+		
 		return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Krusty\Model\ProducedPallet');
 	}
 }

@@ -9,10 +9,10 @@ class BlockedService
 	private $model;
 	private $mapper;
 
-	public function fetchBlocked($cookie = null)
+	public function fetchBlocked($block_id = null)
 	{
 		$mapper = $this->getMapper();
-		return $mapper->fetch($cookie);
+		return $mapper->fetch($block_id);
 	}
 	public function block($cookie, $end){
 		$mapper=$this->getMapper();
