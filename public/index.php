@@ -42,51 +42,65 @@ $app->get('/', function () use ($app) {
 
 // List all orders
 $app->get('/orders', function() use ($app, $orderService) {
-	// get orders from order service
 	$orders = $orderService->fetchOrders();
-	$app->render('header.tpl');
+	$app->render('header.tpl', array(
+		'heading' => "Orders",
+		'subheading' => "administrate & track orders"
+    ));
 	$app->render('orders.tpl', array('orders' => $orders));
 	$app->render('footer.tpl');
 });
 
 // List information about a specific order
 $app->get('/orders/:id', function($id) use ($app, $orderService, $palletService) {
-	// get orders from order service
 	if( ($order = $orderService->fetchOrders($id)) == null ){
 		//Not found, redirect to 404
 		$app->notFound();
 	}
 	$orderedPallets = $palletService->fetchOrderedPallets($order);
-
-	$app->render('header.tpl');
+	$app->render('header.tpl', array(
+		'heading' => "Order Details",
+		'subheading' => "#{$order->order_id}, {$order->customer}"
+    ));
 	$app->render('order_details.tpl', 
 			array('order' => $order,
   				  'pallets' => $orderedPallets));
 	$app->render('footer.tpl');	
 });
 
-// List all customers
-$app->get('/customers', function() use ($app, $customerService) {
-	// fetch customers
-	$customers = $customerService->fetchCustomers();
-	// render customer page
-	$app->render('header.tpl');
-	$app->render('customers.tpl', 
-			array('customers' => $customers));
-	$app->render('footer.tpl');	
-});
-
-
 //List all Cookies
-$app->get('/cookies', function() use ($app, $cookieService, $ingredientService){
+$app->get('/cookies', function() use ($app, $cookieService, $ingredientService, $blockedService){
 	//get cookie array from cookie service
 	$cookies = $cookieService-> fetchCookies();
 	$ingredients = $ingredientService->fetchIngredients();
-	// var_dump($ingredients);	
-	$app->render('header.tpl');
-	$app->render('cookies.tpl', 
-			array('cookies' => $cookies,
-				  'ingredients' => $ingredients));
+	$blocked = $blockedService->fetchBlocked();
+	$app->render('header.tpl', array(
+		'heading' => "Products",
+		'subheading' => "Mmm, yummy KrustyKookies"
+    ));
+	$app->render('cookies.tpl', array(
+		'cookies' => $cookies,
+		'ingredients' => $ingredients,
+		'cookies' => $cookies,
+		'blocked' => $blocked
+	));
+	$app->render('footer.tpl');	
+
+});
+
+// List recipie for a cookie
+$app->get('/cookies/:id', function ($id) use ($app, $recipieService) {
+	$cookie = urldecode($id);
+	if( ($recipie = $recipieService->fetchRecipie($cookie)) == null ){
+		//Not found, redirect to 404
+		$app->notFound();
+	}
+	$app->render('header.tpl', array(
+		'heading' => "Recipie",
+		'subheading' => $recipie->name
+    ));
+	$app->render('cookie_details.tpl', 
+			array('recipie' => $recipie));
 	$app->render('footer.tpl');	
 });
 
@@ -100,98 +114,81 @@ $app->post('/cookies', function() use ($app, $recipieService) {
 		// maybe catch exception instead and show more
 		// descriptive message to the user
 		$app->flash('error', 'Oops, something went wrong. Please try again!');
+	$app->redirect('/cookies');
 	}
 	// redirect to show flash message
+});
+
+// Block cookie
+$app->post('/blocked', function() use ($app, $blockedService){
+	$req = $app->request()->post();
+	try{
+		$result = $blockedService->block($req);
+		$app->flash('success', "{$result->cookie} has been blocked until {$result->end}.");
+	}catch(\Exception $e){
+		$app->flash('error',"{$e->getMessage()}");
+	}
+	$app->redirect('/cookies');
+	
+});
+
+// Unblock cookie
+$app->delete('/blocked/:id', function($id) use ($app){
+	$app->flash('error', 'Not implemented!');
 	$app->redirect('/cookies');
 });
 
-
-// List a recipie
-$app->get('/cookies/:id', function ($id) use ($app, $recipieService) {
-	$cookie = urldecode($id);
-	if( ($recipie = $recipieService->fetchRecipie($cookie)) == null ){
-		//Not found, redirect to 404
-		$app->notFound();
-	}
-
-	$app->render('header.tpl');
-	$app->render('cookie_details.tpl', 
-			array('recipie' => $recipie));
+// List all customers
+$app->get('/customers', function() use ($app, $customerService) {
+	$customers = $customerService->fetchCustomers();
+	$app->render('header.tpl', array(
+		'heading' => "Customers"
+    ));
+	$app->render('customers.tpl', 
+			array('customers' => $customers));
 	$app->render('footer.tpl');	
-});
-
-// List all pallets in storage, and their status
-$app->get('/pallets', function() use ($app, $palletService){
-	$app->render('header.tpl');
-	//get cookie from cookie service
-	if(($pallets = $palletService->fetchProducedPallets()) != null){
-		$app->render('pallets.tpl', array('pallets' => $pallets));
-	}
-	$app->render('footer.tpl');
-});
-$app->get('/pallets/:blocked', function($blocked) use ($app, $blockedService, $palletService){
-	$app->render('header.tpl');
-	$blockedc=$blockedService->fetchBlocked($blocked);
-	$blockingObj=$blockedc[0]; //this is the <Blocked> object
-	
-	//get cookie from cookie service
-	if(($pallets = $palletService->fetchProducedPallets($blockingObj->start, $blockingObj->end, $blockingObj->cookie)) != null){
-			$app->render('pallets.tpl', array('pallets' => $pallets));
-	}else{
-		echo "no pallets concerend by that blocking";
-	}
-	$app->render('footer.tpl');
 });
 
 // List all ingredients
 $app->get('/ingredients', function() use ($app, $ingredientService) {
-	$app->render('header.tpl');
-	// get ingredients from ingredient service
-	if( ($ingredients = $ingredientService->fetchIngredients()) != null){
-		$app->render('ingredient_details.tpl', array('ingredients' => $ingredients));
-	}
+	$ingredients = $ingredientService->fetchIngredients();
+	$app->render('header.tpl', array(
+		'heading' => "Ingredients"
+    ));
+	$app->render('ingredients.tpl', array('ingredients' => $ingredients));
 	$app->render('footer.tpl');
 });
-		
-$app->get('/blocked', function() use ($app, $cookieService, $blockedService){
+
+// List all pallets in storage, and their status
+$app->get('/pallets', function() use ($app, $palletService, $cookieService)
+{
+	$pallets = $palletService->fetchProducedPallets();
 	$cookies = $cookieService->fetchCookies();
-	$blocked = $blockedService->fetchBlocked();
-
-	$app->render('header.tpl');
-
-	$app->render('block_cookie.tpl', array(
-		'cookies' => $cookies,
-		'blocked' => $blocked
+	$app->render('header.tpl', array(
+		'heading' => "Pallets",
+		'subheading' => "view & track produced cookie pallets"
+     ));
+	$app->render('pallets.tpl', array(
+		'pallets' => $pallets,
+		'cookies' => $cookies
 	));
 	$app->render('footer.tpl');
 });
 
-
-// Varför ska man få unblocka cookies. borde inte blocken släppa vid release date?
-$app->post('/unblock', function() use ($app, $blockedService){ 	
-	if($app->request()->post("ub")!=null){
-		$blockedService->unblock($app->request()->post("blocked_id"));
-		$app->redirect('/blocked');
-	}else if($app->request()->post("vp")!=null){
-		
-		$app->redirect('/pallets/'.$app->request()->post("blocked_id"));
-		//$blockedService->unblock($app->request()->post("blocked_id"));
+// Simulate pallet production
+$app->post('/pallets', function () use ($app, $palletService)
+{
+	$data = $app->request()->post();
+	try{
+		$palletService->producePallets($data);
+		$plural = ($data['amount'] > 1) ? 's' : '';
+		$app->flash('success', "Produced {$data['amount']} pallet{$plural} of {$data['cookies']} cookies.");
+	}catch(Exception $e){
+		$app->flash('error', "{$e->getMessage()}");
 	}
-	
+	$app->redirect('/pallets');
+});
 		
-	
-});
-
-$app->post('/blocked', function() use ($app, $blockedService){
-	$req = $app->request()->post();
-	$msg = (($result = $blockedService->block($req)) != null) 
-		 ? 'Cookie has been blocked!' 
-		 : 'Oops, something went wrong. Please try again!';
-	$app->flash('response_msg', $msg);
-	$app->redirect('/blocked');
-	
-});
-
 // Define more routes
 // ...
 

@@ -25,9 +25,7 @@ class BlockedService
 		{
 			return false;
 		}
-		print 'woo';
 		$model->fromArray($data);
-		var_dump($model);
 		return $mapper->block($model);
 	}
 	public function unblock($blocked_id){

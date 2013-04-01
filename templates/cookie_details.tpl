@@ -1,6 +1,5 @@
 
-<p>Cookie: {{{recipie.name}}}</p>
-<table>
+<table class="table table-striped table-bordered">
 <thead>
 	<tr>
 		<th>Ingredient</th>

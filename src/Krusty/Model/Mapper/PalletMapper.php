@@ -41,4 +41,10 @@ class PalletMapper extends AbstractMapper
 		
 		return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Krusty\Model\ProducedPallet');
 	}
+
+	// produce some new pallets
+	public function createPallets($data)
+		{
+			throw new \Exception('Not implemented.');
+		}	
 }

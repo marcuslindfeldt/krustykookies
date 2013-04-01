@@ -1,4 +1,4 @@
-<table>
+<table class="table table-striped table-bordered">
 <thead>
 	<tr>
 		<th>Order ID</th>
@@ -13,7 +13,8 @@
 			<td>{{order_id}}</td>
 			<td>{{deadline}}</td>
 			<td>{{{customer}}}</td>
-			<td><a href="/orders/{{order_id}}">Details</a></td>
+			<td class="center-column"><a class="label label-info" href="/orders/{{order_id}}">Details</a></td>
+
 		</tr>
 {{/orders}}
 </tbody>

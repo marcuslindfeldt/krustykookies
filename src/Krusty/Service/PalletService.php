@@ -22,6 +22,12 @@ class PalletService
 		return $mapper->fetchProducedPallets($start, $end, $cookie);
 	}
 
+	// simulate pallet creation
+	public function producePallets($data)
+	{
+		$mapper = $this->getMapper();
+		return $mapper->createPallets($data);
+	}
 
 	public function getMapper()
 	{

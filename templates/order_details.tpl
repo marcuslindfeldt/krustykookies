@@ -1,18 +1,39 @@
-<p>Order id: {{order.order_id}}</p>
-<p>Delivery date: {{order.deadline}}</p>
-<p>Customer: {{{order.customer}}}</p>
-<table>
-<thead>
+<table class="table  table-bordered">
+<tbody>
 	<tr>
-		<th>Quantity</th>
-		<th>Cookie</th>
+		<th colspan="2">Order information</th>
 	</tr>
-</thead>	
+	<tr>
+		<th class="muted">Order id</th>
+		<td>{{order.order_id}}</td>
+	</tr>
+	<tr>
+		<th class="muted">Delivery date</th>
+		<td>{{order.deadline}}</td>
+	</tr>
+	<tr>
+		<th class="muted">Customer</th>
+		<td>{{{order.customer}}}</td>
+	</tr>
+		<tr>
+		<th class="muted">Status</th>
+		<td><span class="label label-success">Delivered</span></td>
+	</tr>
+</tbody>
+<tbody>
+	<tr>
+		<th colspan="2">Ordered Cookies</th>
+	</tr>
+	<tr>
+		<th class="muted">Name</th>
+		<th class="muted">Quantity</th>
+	</tr>
+</tbody>	
 <tbody>
 {{#pallets}}
 	<tr>
-		<td>{{quantity}}</td>
 		<td>{{{cookie}}}</td>
+		<td>{{quantity}}</td>
 	</tr>
 {{/pallets}}
 </tbody>

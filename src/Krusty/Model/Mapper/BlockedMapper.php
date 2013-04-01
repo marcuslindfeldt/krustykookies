@@ -22,17 +22,14 @@ class BlockedMapper extends AbstractMapper
 
 	public function block(Blocked $block)
 	{
-		try {
-			$db = $this->getAdapter();
-			$sql = 'INSERT INTO Blocked VALUES(NULL, :cookie, CURDATE(), :end)';
-			$stmt = $db->prepare($sql);
-			return $stmt->execute(array(
-				'cookie' => $block->cookie, 
-				'end' => $block->end
-			));
-		}catch (\Exception $e){
-			return null;
-		}
+		$db = $this->getAdapter();
+		$sql = 'INSERT INTO Blocked VALUES(NULL, :cookie, CURDATE(), :end)';
+		$stmt = $db->prepare($sql);
+		return ($stmt->execute(array(
+			'cookie' => $block->cookie, 
+			'end' => $block->end)))
+			? $block
+			: false;
 	}
 
 	public function unblock($blocked_id){
