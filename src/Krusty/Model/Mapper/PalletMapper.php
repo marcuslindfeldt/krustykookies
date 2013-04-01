@@ -44,7 +44,25 @@ class PalletMapper extends AbstractMapper
 
 	// produce some new pallets
 	public function createPallets($data)
-		{
-			throw new \Exception('Not implemented.');
-		}	
+	{
+		$query  = "INSERT INTO ProducedPallets (cookie, produced)";
+		$query .= "VALUES (:cookie, NOW())";
+
+		$db = $this->getAdapter();
+		try{
+			$db->beginTransaction();
+
+			$stmt = $db->prepare($query);
+			
+			for($i = 0; $i < $data['amount']; $i++){
+				$stmt->execute(array(
+					'cookie' => $data['cookies']
+				));
+			}
+			return $db->commit();
+		}catch(\PDOException $e){
+			$db->rollBack();
+			throw new \Exception($e->getMessage());
+		}
+	}
 }
