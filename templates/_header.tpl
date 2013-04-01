@@ -21,7 +21,13 @@
 			            <span class="icon-bar"></span>
 			            <span class="icon-bar"></span>
          			 </button>
-					<a href="" class="brand"><strong>KrustyKookies</strong></a>
+					<a href="/" class="brand"><strong>KrustyKookies</strong></a>
+					{{#logged_in}}
+					<a class="btn btn-primary pull-right" href="/logout"><i class="icon-user icon-white"></i> Logout</a>
+					{{/logged_in}}
+					{{^logged_in}}
+					<a class="btn btn-primary pull-right" href="/login"><i class="icon-user icon-white"></i> Login</a>
+					{{/logged_in}}
 					<div class="nav-collapse collapse">
 						<ul class="nav">
 							<li><a id="orders" href="/orders">Orders</a></li>
@@ -47,6 +53,12 @@
 				<strong>Success!</strong> {{success}}
 			</div>
 			{{/success}}
+			{{#info}}
+			<div class="alert alert-info">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				{{info}}
+			</div>
+			{{/info}}
 			{{#error}}
 			<div class="alert alert-error">
 				<button type="button" class="close" data-dismiss="alert">&times;</button>

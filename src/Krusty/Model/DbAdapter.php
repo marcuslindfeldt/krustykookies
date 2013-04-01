@@ -1,6 +1,7 @@
 <?php
 namespace Krusty\Model;
 
+use \Krusty\Config;
 /**
  * Singleton DbAdapter
  *
@@ -17,8 +18,10 @@ class DbAdapter
 	 */
 	private function __construct()
 	{
-		$dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';';
-		$db = new \PDO($dsn, DB_USER, DB_PASS);
+		$config = Config::instance();
+		$dsn  = 'mysql:host=' . $config->db_host . ';';
+		$dsn .= 'dbname=' . $config->db_name . ';';
+		$db = new \PDO($dsn, $config->db_user, $config->db_pass);
 	    $db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 	    $db->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
     	$this->db = $db;

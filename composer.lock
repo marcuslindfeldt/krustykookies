@@ -1,5 +1,5 @@
 {
-    "hash": "c22c583191f5e5fe784c48d427d616a1",
+    "hash": "c68b1ada2837ef5d642ff1daf3d6da7d",
     "packages": [
         {
             "name": "mustache/mustache",
@@ -276,16 +276,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "3.7.16",
+            "version": "3.7.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "3.7.16"
+                "reference": "3.7.19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3.7.16",
-                "reference": "3.7.16",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3.7.19",
+                "reference": "3.7.19",
                 "shasum": ""
             },
             "require": {
@@ -299,7 +299,7 @@
                 "phpunit/php-text-template": ">=1.1.1",
                 "phpunit/php-timer": ">=1.0.2,<1.1.0",
                 "phpunit/phpunit-mock-objects": ">=1.2.0,<1.3.0",
-                "symfony/yaml": ">=2.2.0"
+                "symfony/yaml": ">=2.0.0,<2.3.0"
             },
             "require-dev": {
                 "pear-pear/pear": "1.9.4"
@@ -346,7 +346,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2013-03-06 11:07:01"
+            "time": "2013-03-25 11:45:06"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -492,6 +492,53 @@
             "time": "2012-12-13 02:15:50"
         },
         {
+            "name": "slim/strong",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/silentworks/Strong.git",
+                "reference": "1af2dc2f49f14521bda280a3b91c8fef54f67fc0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/silentworks/Strong/zipball/1af2dc2f49f14521bda280a3b91c8fef54f67fc0",
+                "reference": "1af2dc2f49f14521bda280a3b91c8fef54f67fc0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Strong": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andrew Smith",
+                    "email": "a.smith@silentworks.co.uk",
+                    "homepage": "http://www.silentworks.co.uk/"
+                },
+                {
+                    "name": "Jakub Westfalewski",
+                    "email": "jwest@jwest.pl",
+                    "homepage": "http://jwest.pl/"
+                }
+            ],
+            "description": "Authentication Library with multiple drivers",
+            "homepage": "http://github.com/silentworks/Strong",
+            "keywords": [
+                "Authentication",
+                "extensions"
+            ],
+            "time": "2012-12-31 10:57:13"
+        },
+        {
             "name": "symfony/yaml",
             "version": "v2.2.0",
             "target-dir": "Symfony/Component/Yaml",
@@ -546,9 +593,9 @@
 
     ],
     "minimum-stability": "stable",
-    "stability-flags": [
-
-    ],
+    "stability-flags": {
+        "slim/strong": 20
+    },
     "platform": {
         "php": ">=5.3.0"
     },

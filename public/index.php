@@ -1,114 +1,124 @@
 <?php
-require '../config/config.php';
 require '../vendor/autoload.php';
 
 use \Slim\Slim,
-	\Slim\Extras\Views\Mustache,
 	\Slim\Middleware\SessionCookie,
-	\Krusty\Service\OrderService,
-	\Krusty\Service\CustomerService,
-	\Krusty\Service\RecipieService,
-	\Krusty\Service\CookieService,
-	\Krusty\Service\IngredientService,
-	\Krusty\Service\PalletService,
-	\Krusty\Service\BlockedService;
+	\Slim\Extras\Middleware\StrongAuth,
+	\Krusty\Config,
+	\Krusty\KrustyView;
 
-// Set dir for template engine
-Mustache::$mustacheDirectory = __DIR__ . '/../vendor/mustache/mustache/src/Mustache/';
+define("APPLICATION_PATH", __DIR__ . '/..');
 
-// Init framework
-$appArray=array();
-$appArray['view']=new Mustache();
-$appArray['templates.path']=TEMPLATE_DIR;
-$app = new Slim($appArray);
+$config = Config::instance();
+// Initialize framework
+$app = new Slim(array(
+    'templates.path' => $config->template_dir,
+    'view' => new KrustyView()
+));
+
+// Add session cookie for flash messages
 $app->add(new SessionCookie());
+// Add basic authentication (user = admin, pass = password)
+$app->add(new StrongAuth($config->auth));
 
 // Init services
-$orderService = new OrderService();
-$customerService = new CustomerService();
-$recipieService = new RecipieService();
-$palletService = new PalletService();
-$cookieService = new CookieService();
-$ingredientService = new IngredientService();
-$blockedService = new BlockedService();
-//...
+
+$serviceLocator = function ($name) {
+	$class = '\\Krusty\\Service\\' . ucfirst($name) . 'Service';
+	if(class_exists($class)){
+		return new $class;
+	} 
+};
 
 // Define the index route
 $app->get('/', function () use ($app) {
-	$app->render('header.tpl');
 	$app->render('index.tpl');
-	$app->render('footer.tpl');
+});
+
+$app->get('/login', function () use ($app) {
+	$app->render('login.tpl');
+});
+
+$app->post('/login', function () use ($app) {
+	$auth = \Strong\Strong::getInstance();
+	$user = $app->request()->post('username');
+	$pass = $app->request()->post('password');
+
+    if ($auth->login($user, $pass)) {
+        $app->flash('info', "Successfully logged in as {$user}.");
+        $app->redirect('/orders');
+    }
+
+    $app->redirect('/login');
+});
+
+$app->get('/logout', function () use ($app) {
+	$auth = \Strong\Strong::getInstance();
+    if ($auth->logout()){
+        $app->flash('info', "You're now logged out. Have a nice day!");
+    }
+    $app->redirect('/');
 });
 
 // List all orders
-$app->get('/orders', function() use ($app, $orderService) {
-	$orders = $orderService->fetchOrders();
-	$app->render('header.tpl', array(
+$app->get('/orders', function() use ($app, $serviceLocator) {
+	$orders = $serviceLocator('order')->fetchOrders();
+	$app->render('orders.tpl', array(
 		'heading' => "Orders",
-		'subheading' => "administrate & track orders"
-    ));
-	$app->render('orders.tpl', array('orders' => $orders));
-	$app->render('footer.tpl');
+		'subheading' => "administrate & track orders",
+		'orders' => $orders));
 });
 
 // List information about a specific order
-$app->get('/orders/:id', function($id) use ($app, $orderService, $palletService) {
-	if( ($order = $orderService->fetchOrders($id)) == null ){
+$app->get('/orders/:id', function($id) use ($app, $serviceLocator) {
+	if( ($order = $serviceLocator('order')->fetchOrders($id)) == null ){
 		//Not found, redirect to 404
 		$app->notFound();
 	}
-	$orderedPallets = $palletService->fetchOrderedPallets($order);
-	$app->render('header.tpl', array(
+	$orderedPallets = $serviceLocator('pallet')->fetchOrderedPallets($order);
+	$app->render('order_details.tpl', array(
+		'order' => $order,
 		'heading' => "Order Details",
-		'subheading' => "#{$order->order_id}, {$order->customer}"
-    ));
-	$app->render('order_details.tpl', 
-			array('order' => $order,
-  				  'pallets' => $orderedPallets));
-	$app->render('footer.tpl');	
+		'subheading' => "#{$order->order_id}, {$order->customer}",
+		'pallets' => $orderedPallets
+	));
 });
 
 //List all Cookies
-$app->get('/cookies', function() use ($app, $cookieService, $ingredientService, $blockedService){
+$app->get('/cookies', function() use ($app, $serviceLocator){
 	//get cookie array from cookie service
-	$cookies = $cookieService-> fetchCookies();
-	$ingredients = $ingredientService->fetchIngredients();
-	$blocked = $blockedService->fetchBlocked();
-	$app->render('header.tpl', array(
-		'heading' => "Products",
-		'subheading' => "Mmm, yummy KrustyKookies"
-    ));
+	$cookies = $serviceLocator('cookie')-> fetchCookies();
+	$ingredients = $serviceLocator('ingredient')->fetchIngredients();
+	$blocked = $serviceLocator('blocked')->fetchBlocked();
 	$app->render('cookies.tpl', array(
+		'heading' => "Products",
+		'subheading' => "Mmm, yummy KrustyKookies",	             
 		'cookies' => $cookies,
 		'ingredients' => $ingredients,
 		'cookies' => $cookies,
 		'blocked' => $blocked
 	));
-	$app->render('footer.tpl');	
-
 });
 
 // List recipie for a cookie
-$app->get('/cookies/:id', function ($id) use ($app, $recipieService) {
+$app->get('/cookies/:id', function ($id) use ($app, $serviceLocator) {
 	$cookie = urldecode($id);
-	if( ($recipie = $recipieService->fetchRecipie($cookie)) == null ){
+	if( ($recipie = $serviceLocator('recipie')->fetchRecipie($cookie)) == null ){
 		//Not found, redirect to 404
 		$app->notFound();
 	}
-	$app->render('header.tpl', array(
+	$app->render('cookie_details.tpl', array(
 		'heading' => "Recipie",
-		'subheading' => $recipie->name
-    ));
-	$app->render('cookie_details.tpl', 
-			array('recipie' => $recipie));
-	$app->render('footer.tpl');	
+		'subheading' => $recipie->name,
+		'recipie' => $recipie
+	));
 });
 
-$app->post('/cookies', function() use ($app, $recipieService) {
+$app->post('/cookies', function() use ($app, $serviceLocator) {
 	// Get the post data
 	$data = $app->request()->post();
 	// Add cookie, create flash message
-	if($recipieService->addRecipie($data)){
+	if($serviceLocator('recipie')->addRecipie($data)){
 		$app->flash('success', 'You successfully added a new cookie!');
 	}else{
 		// maybe catch exception instead and show more
@@ -120,7 +130,7 @@ $app->post('/cookies', function() use ($app, $recipieService) {
 });
 
 // Block cookie
-$app->post('/blocked', function() use ($app, $blockedService){
+$app->post('/blocked', function() use ($app, $serviceLocator) {
 	$req = $app->request()->post();
 	try{
 		$result = $blockedService->block($req);
@@ -133,54 +143,48 @@ $app->post('/blocked', function() use ($app, $blockedService){
 });
 
 // Unblock cookie
-$app->delete('/blocked/:id', function($id) use ($app){
+$app->delete('/blocked/:id', function($id) use ($app, $serviceLocator) {
 	$app->flash('error', 'Not implemented!');
 	$app->redirect('/cookies');
 });
 
 // List all customers
-$app->get('/customers', function() use ($app, $customerService) {
-	$customers = $customerService->fetchCustomers();
-	$app->render('header.tpl', array(
-		'heading' => "Customers"
-    ));
-	$app->render('customers.tpl', 
-			array('customers' => $customers));
-	$app->render('footer.tpl');	
+$app->get('/customers', function() use ($app, $serviceLocator) {
+	$customers = $serviceLocator('customer')->fetchCustomers();
+	$app->render('customers.tpl', array(
+		'heading' => "Customers",
+		'customers' => $customers
+	));
 });
 
 // List all ingredients
-$app->get('/ingredients', function() use ($app, $ingredientService) {
-	$ingredients = $ingredientService->fetchIngredients();
-	$app->render('header.tpl', array(
-		'heading' => "Ingredients"
-    ));
-	$app->render('ingredients.tpl', array('ingredients' => $ingredients));
-	$app->render('footer.tpl');
+$app->get('/ingredients', function() use ($app, $serviceLocator) {
+	$ingredients = $serviceLocator('ingredient')->fetchIngredients();
+	$app->render('ingredients.tpl', array(
+		'heading' => "Ingredients",
+		'ingredients' => $ingredients
+	));
 });
 
 // List all pallets in storage, and their status
-$app->get('/pallets', function() use ($app, $palletService, $cookieService)
+$app->get('/pallets', function() use ($app, $serviceLocator)
 {
-	$pallets = $palletService->fetchProducedPallets();
-	$cookies = $cookieService->fetchCookies();
-	$app->render('header.tpl', array(
-		'heading' => "Pallets",
-		'subheading' => "view & track produced cookie pallets"
-     ));
+	$pallets = $serviceLocator('pallet')->fetchProducedPallets();
+	$cookies = $serviceLocator('cookie')->fetchCookies();
 	$app->render('pallets.tpl', array(
+		'heading' => "Pallets",
+		'subheading' => "view & track produced cookie pallets",
 		'pallets' => $pallets,
 		'cookies' => $cookies
 	));
-	$app->render('footer.tpl');
 });
 
 // Simulate pallet production
-$app->post('/pallets', function () use ($app, $palletService)
+$app->post('/pallets', function () use ($app, $serviceLocator)
 {
 	$data = $app->request()->post();
 	try{
-		$palletService->producePallets($data);
+		$serviceLocator('pallet')->producePallets($data);
 		$plural = ($data['amount'] > 1) ? 's' : '';
 		$app->flash('success', "Produced {$data['amount']} pallet{$plural} of {$data['cookies']} cookies.");
 	}catch(Exception $e){
