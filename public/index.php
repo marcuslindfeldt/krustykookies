@@ -159,12 +159,25 @@ $app->get('/customers', function() use ($app, $serviceLocator) {
 $app->get('/ingredients', function() use ($app, $serviceLocator) {
 	$options = $app->request()->get();
 	$ingredients = $serviceLocator('ingredient', $options)
-		->fetchIngredients($options);
+		->fetchIngredients();
 	$app->render('ingredients.tpl', array(
 		'heading' => "Ingredients",
 		'ingredients' => $ingredients,
 		'paginate' => array('ingredients')
 	));
+});
+
+// Refill ingredient
+$app->post('/ingredients', function() use ($app, $serviceLocator) {
+	try{
+		$post = $app->request()->post();
+		$ingredient = $serviceLocator('ingredient')
+			->refillIngredient($post);
+		$app->flash('success', "{$ingredient->ingredient} has been refilled");
+	}catch (Exception $e){
+		$app->flash('error', "{$e->getMessage()}");
+	}
+	$app->redirect('/ingredients');
 });
 
 // List all pallets in storage, and their status
@@ -187,8 +200,8 @@ $app->get('/pallets', function() use ($app, $serviceLocator)
 // Simulate pallet production
 $app->post('/pallets', function () use ($app, $serviceLocator)
 {
-	$data = $app->request()->post();
 	try{
+		$data = $app->request()->post();
 		$serviceLocator('pallet')->producePallets($data);
 		$plural = ($data['amount'] > 1) ? 's' : '';
 		$app->flash('success', "Produced {$data['amount']} pallet{$plural} of {$data['cookies']} cookies.");

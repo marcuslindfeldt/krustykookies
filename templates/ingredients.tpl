@@ -19,3 +19,29 @@
 </tbody>
 </table>
 {{{ingredients_paginator}}}
+
+<h2>Refill ingredients</h2>
+<form action="/ingredients" method="post" class="form-horizontal well">
+	<fieldset>
+	<div class="control-group">
+		<label class="control-label required" for="ingredient">Ingredient</label>
+		<div class="controls">
+			<select class="span3" name="ingredient" id="ingredient" required>
+				{{#ingredients}}
+				<option value="{{ingredient}}">{{ingredient}}</option>
+				{{/ingredients}}
+			</select>
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label required" for="quantity">Quantity</label>
+		<div class="controls">
+			<input type="number" class="span3" name="quantity" id="quantity" min="1" placeholder="quantity" required />
+		</div>
+
+	</div>
+	<div class="controls">
+			<input type="submit" class="btn btn-primary" value="Refill" />
+	</div>
+	</fieldset>
+</form>

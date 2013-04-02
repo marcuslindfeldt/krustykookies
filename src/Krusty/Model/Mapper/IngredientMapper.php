@@ -21,4 +21,17 @@ class IngredientMapper extends AbstractMapper
 		return $stmt->fetchAll(\PDO::FETCH_CLASS, "\Krusty\Model\Ingredient");
 
 	}
+
+	public function update(Ingredient $i)
+	{
+		$sql  = 'UPDATE Ingredients ';
+		$sql .= 'SET quantity = quantity + :quantity ';
+		$sql .= 'WHERE ingredient = :ingredient';
+
+		$db = $this->getAdapter();
+		$stmt = $db->prepare($sql);
+		
+		$result = $stmt->execute(array_filter($i->toArray()));
+		return ($result) ? $i : null;
+	}
 }

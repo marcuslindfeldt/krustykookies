@@ -6,15 +6,17 @@ use \Krusty\Model\Ingredient,
 
 class IngredientService extends AbstractService
 {
-	public function fetchIngredients($options = null)
+	public function fetchIngredients()
 	{
 		$mapper = $this->getMapper();
 		$result = $mapper->fetchAll();
 		return $this->createPaginator($result);
 	}
 
-	public function addIngredient($data)
+	public function refillIngredient($data)
 	{
-		throw new \Exception('Not implemented.');
+		$ingredient = $this->getModel();
+		$ingredient->fromArray($data);
+		return $this->getMapper()->update($ingredient);
 	}
 }
