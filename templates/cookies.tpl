@@ -3,15 +3,27 @@
 	<tr>
 		<th>Cookie</th>
 		<th>Description</th>
-		<th></th>
+		<th class="center-column">In storage</th>
 	</tr>
 </thead>	
 <tbody>
 {{#cookies}}
 		<tr>
-			<td>{{cookie}}</td>
+			<td>
+				{{#isBlocked}}
+				<span class="label label-important pull-right">Blocked</span>
+				{{/isBlocked}}
+				<a href="/cookies/{{getId}}">{{cookie}}</a>
+			</td>
 			<td>{{getDescription}}</td>
-			<td class="center-column"><a class="label label-info" href="/cookies/{{getId}}">Recipie</a></td>
+			<td class="center-column">
+				{{#inStorage}}
+				{{in_store}}
+				{{/inStorage}}
+				{{^inStorage}}
+				<span class="label label-warning">Sold out!</span>
+				{{/inStorage}}
+			</td>
 		</tr>
 {{/cookies}}
 </tbody>
@@ -98,7 +110,7 @@
 		<div class="control-group">
 			<label class="control-label required" for="end">Block release date</label>
 			<div class="controls">
-				<input type="text" name="end" id="end" placeholder="DD/MM/YYYY" required />
+				<input type="text" name="end" id="end" class="datepicker" placeholder="DD/MM/YYYY" required />
 			</div>
 		</div>
 		<div class="controls">
@@ -106,17 +118,3 @@
 		</div>
 	</fieldset>
 </form>
-
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
-<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" 
-        type="text/javascript"></script>
-<script type="text/javascript">
-(function(){
-  var date = new Date();
-  date.setDate(date.getDate()+1);
-  $( "#end" ).datepicker({ 
-    dateFormat: 'yy-mm-dd',
-    minDate: date
-  });
-})(); 
-</script>

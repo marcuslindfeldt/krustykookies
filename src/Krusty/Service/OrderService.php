@@ -15,13 +15,40 @@ class OrderService extends AbstractService
 			 : $mapper->fetch($id);
 	}
 
-	public function putOrder(Order $order)
+	public function putOrder(array $data)
 	{
-		throw new \Exception('Not implemented.');
+		$mapper = $this->getMapper();
+		$order = $this->getModel();
+
+		//validate input..
+		$order->fromArray($data);
+
+		if (!$order->hasOrderedPallets()) {
+			throw new \Exception('Minimum order is 1 pallet');
+		}
+
+		return $mapper->save($order);
 	}
 
-	public function deleteOrder(Order $order)
+	public function deliverOrder($id)
 	{
-		throw new \Exception('Not implemented.');
+		$mapper = $this->getMapper();
+		$order = $this->getModel();
+
+		//validate input..
+		
+		$order->order_id = $id;
+
+		return $mapper->deliver($order);
+	}
+
+	public function deleteOrder($data)
+	{
+		$mapper = $this->getMapper();
+		$order = $this->getModel();
+
+		//validate input..
+
+		return $mapper->delete($order->fromArray($data));
 	}
 }

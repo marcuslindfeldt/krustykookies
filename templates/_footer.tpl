@@ -8,6 +8,9 @@
 	  </div>
 	</footer>
 
+	<script src="http://code.jquery.com/jquery.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/krusty.js"></script>
 	</body>
 </html>

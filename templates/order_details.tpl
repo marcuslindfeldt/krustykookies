@@ -5,7 +5,7 @@
 	</tr>
 	<tr>
 		<th class="muted">Order id</th>
-		<td>{{order.order_id}}</td>
+		<td>#{{order.order_id}}</td>
 	</tr>
 	<tr>
 		<th class="muted">Delivery date</th>
@@ -15,9 +15,17 @@
 		<th class="muted">Customer</th>
 		<td>{{{order.customer}}}</td>
 	</tr>
-		<tr>
+	<tr>
 		<th class="muted">Status</th>
-		<td><span class="label label-success">Delivered</span></td>
+		<td>
+			<span class="label label-{{order.getStatus.label}}">
+				{{order.getStatus.title}}
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<th class="muted">Created</th>
+		<td>{{order.created}}</td>
 	</tr>
 </tbody>
 <tbody>
@@ -38,6 +46,10 @@
 {{/pallets}}
 </tbody>
 </table>
+<form action="" method="post">
+	<button type="submit" class="btn btn-success pull-right" {{#order.delivered}}disabled{{/order.delivered}}>Deliver order!</button>
+	
+</form>
 
 <ul class="pager">
   <li class="previous">

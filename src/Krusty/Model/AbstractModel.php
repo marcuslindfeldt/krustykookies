@@ -19,13 +19,22 @@ abstract class AbstractModel implements \JsonSerializable
 		return $this;
 	}
 
-	public function toArray()
+	public function toArray(array $fields = null)
 	{
-		return get_object_vars($this);	
+		$array = get_object_vars($this); 
+		if($fields){
+			$array = array_intersect_key($array, array_flip($fields));
+		}
+		return $array;	
 	}
 
 	public function jsonSerialize()
 	{
 		return $this->toArray();
+	}
+
+	private function filter($var)
+	{
+		
 	}
 }

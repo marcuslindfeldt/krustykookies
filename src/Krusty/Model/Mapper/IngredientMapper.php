@@ -31,7 +31,8 @@ class IngredientMapper extends AbstractMapper
 		$db = $this->getAdapter();
 		$stmt = $db->prepare($sql);
 		
-		$result = $stmt->execute(array_filter($i->toArray()));
+		$result = $stmt->execute($i->toArray(array(
+             'quantity', 'ingredient')));
 		return ($result) ? $i : null;
 	}
 }

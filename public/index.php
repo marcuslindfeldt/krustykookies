@@ -64,10 +64,27 @@ $app->get('/logout', function () use ($app) {
 // List all orders
 $app->get('/orders', function() use ($app, $serviceLocator) {
 	$orders = $serviceLocator('order')->fetchOrders();
+	$cookies = $serviceLocator('cookie')-> fetchCookies();
+	$customers = $serviceLocator('customer')-> fetchCustomers();
 	$app->render('orders.tpl', array(
 		'heading' => "Orders",
 		'subheading' => "administrate & track orders",
-		'orders' => $orders));
+		'orders' => $orders,
+		'customers' => $customers,
+		'cookies' => $cookies
+	));
+});
+
+// Add a new order
+$app->post('/orders', function() use ($app, $serviceLocator) {
+	$data = $app->request()->post();
+	try{
+		$serviceLocator('order')->putOrder($data);
+		$app->flash('success', 'You successfully added a new order!');
+	}catch (\Exception $e){
+		$app->flash('error', $e->getMessage());
+	}
+	$app->redirect('/orders');
 });
 
 // List information about a specific order
@@ -86,6 +103,17 @@ $app->get('/orders/:id', function($id) use ($app, $serviceLocator) {
 		'subheading' => "#{$order->order_id}, {$order->customer}",
 		'pallets' => $orderedPallets
 	));
+});
+
+// Deliver order
+$app->post('/orders/:id', function($id) use ($app, $serviceLocator) {
+	try{
+		$serviceLocator('order')->deliverOrder($id);
+		$app->flash('success', 'Order has been delivered');
+	}catch (\Exception $e){
+		$app->flash('error', $e->getMessage());
+	}
+	$app->redirect('/orders/' . $id);
 });
 
 //List all Cookies
@@ -190,7 +218,7 @@ $app->get('/pallets', function() use ($app, $serviceLocator)
 	$cookies = $serviceLocator('cookie')->fetchCookies();
 	$app->render('pallets.tpl', array(
 		'heading' => "Pallets",
-		'subheading' => "view & track produced cookie pallets",
+		'subheading' => "view & track cookie pallets",
 		'pallets' => $pallets,
 		'cookies' => $cookies,
 		'paginate' => array('pallets')

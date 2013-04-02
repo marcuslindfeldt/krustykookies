@@ -7,10 +7,22 @@ class Cookie extends AbstractModel
 {
 	public $cookie;
 	public $description;
+	public $block_id;
+	public $in_store;
 
 	public function getDescription()
 	{
 		return (empty($this->description)) ? 'N/A' : $this->description; 
+	}
+
+	public function isBlocked()
+	{
+		return !is_null($this->block_id);
+	}
+
+	public function inStorage()
+	{
+		return !is_null($this->in_store);
 	}
 
 	public function getId()

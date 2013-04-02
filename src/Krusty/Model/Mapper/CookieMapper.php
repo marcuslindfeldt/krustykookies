@@ -35,7 +35,15 @@ class CookieMapper extends AbstractMapper
 
 	public function fetchAll()
 	{
-		$sql = 'SELECT * FROM Cookies';
+		
+		$sql  = 'SELECT * FROM Cookies ';
+		$sql .= 'LEFT JOIN Blocked USING (cookie) ';
+		$sql .= 'LEFT JOIN (SELECT cookie, count(*) AS in_store FROM Cookies ';
+		$sql .= 'NATURAL JOIN ProducedPallets ';
+		$sql .= 'WHERE order_id IS NULL ';
+		$sql .= 'GROUP BY cookie) B USING (cookie)';
+		
+
 		$stmt = $this->getAdapter()->query($sql);
 		return $stmt->fetchAll(\PDO::FETCH_CLASS, "\Krusty\Model\Cookie");	
 	}

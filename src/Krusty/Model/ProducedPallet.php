@@ -6,22 +6,30 @@ class ProducedPallet extends AbstractModel
 {
 	public $pallet_id;
 	public $order_id;
+	public $block_id;
 	public $cookie;
 	public $produced;
 	public $customer;
+	public $delivered;
 	
-	public function isDelivered()
+
+	public function getStatus()
 	{
-// 		return (empty($this->description)) ? 'N/A' : $this->description;
-	}
-	
-	public function getCustomer()
-	{
-// 		return (empty($this->description)) ? 'N/A' : $this->description;
-	}
-	
-	public function getLocation()
-	{
-		// 		return (empty($this->description)) ? 'N/A' : $this->description;
+		if(!is_null($this->delivered)){
+			return array(
+				'label' => 'success',
+				'title' => 'Delivered'
+			);
+		}else if(!is_null($this->block_id)){
+			return array(
+				'label' => 'important',
+				'title' => 'Blocked'
+			);
+		}else{
+			return array(
+				'label' => 'info',
+				'title' => 'In storage'
+			);
+		}
 	}
 }

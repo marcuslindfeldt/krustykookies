@@ -38,10 +38,11 @@ CREATE TABLE Customers (
 );
 
 CREATE TABLE Orders (
-    `order_id` SERIAL,
+    `order_id` SMALLINT(5) UNSIGNED ZEROFILL AUTO_INCREMENT,
     `customer` VARCHAR(128) NOT NULL,
-    `deadline` DATETIME NOT NULL,
-    `delivered` DATETIME,
+    `created` DATETIME NOT NULL,
+    `deadline` DATE NOT NULL,
+    `delivered` DATE,
     FOREIGN KEY (`customer`) REFERENCES Customers (`customer`),
     PRIMARY KEY (`order_id`)
 );
@@ -49,7 +50,7 @@ CREATE TABLE Orders (
 -- weak entity, should be able to place an order 
 -- on pallets that hasn't yet been produced
 CREATE TABLE OrderedPallets (
-    `order_id` BIGINT UNSIGNED,
+    `order_id` SMALLINT(5) UNSIGNED NOT NULL,
     `cookie` VARCHAR(64),
     `quantity` BIGINT UNSIGNED,
     FOREIGN KEY (`order_id`) REFERENCES Orders (`order_id`),
@@ -62,8 +63,8 @@ CREATE TABLE OrderedPallets (
 -- that specific order. if so then delivered field in
 -- Orders are set. 
 CREATE TABLE ProducedPallets (
-    `pallet_id` SERIAL,
-    `order_id` BIGINT UNSIGNED,
+    `pallet_id` SMALLINT(5) UNSIGNED ZEROFILL AUTO_INCREMENT,
+    `order_id` SMALLINT(5) UNSIGNED,
     `cookie` VARCHAR(64) NOT NULL,
     `produced` DATETIME NOT NULL,
     FOREIGN KEY (`order_id`) REFERENCES Orders (`order_id`),
@@ -72,7 +73,7 @@ CREATE TABLE ProducedPallets (
 );
 
 CREATE TABLE Blocked (
-    `block_id` SERIAL,
+    `block_id` SMALLINT(5) UNSIGNED ZEROFILL AUTO_INCREMENT,
     `cookie` VARCHAR(64) NOT NULL,
     `start` DATE NOT NULL,
     `end` DATE NOT NULL,
@@ -90,25 +91,25 @@ INSERT INTO Cookies (`cookie`) VALUES
 ('Berliner');
 
 INSERT INTO Ingredients (`ingredient`, `quantity`, `lastAddition`) VALUES
-('Butter', 10000, 10000),
-('Sugar', 10000, 10000),
-('Chopped almonds', 10000, 10000),
-('Flour', 10000, 10000),
-('Cinnamon', 10000, 10000),
-('Icing sugar', 10000, 10000),
-('Eggs', 10000, 10000),
-('Vanilla sugar', 10000, 10000),
-('Chocolate', 10000, 10000),
+('Butter', 10000, 0),
+('Sugar', 10000, 0),
+('Chopped almonds', 10000, 0),
+('Flour', 10000, 0),
+('Cinnamon', 10000, 0),
+('Icing sugar', 10000, 0),
+('Eggs', 10000, 0),
+('Vanilla sugar', 10000, 0),
+('Chocolate', 10000, 0),
 ('Vanilla', 10000, 10000),
-('Sodium bicarbonate', 10000, 10000),
-('Wheat flour', 10000, 10000),
-('Potato starch', 10000, 10000),
-('Marzipan', 10000, 10000),
-('Egg whites', 10000, 10000),
-('Bread crumbs', 10000, 10000),
-('Fine-ground nuts', 10000, 10000),
-('Ground, roasted nuts', 10000, 10000),
-('Roasted, chopped nuts', 10000, 10000);
+('Sodium bicarbonate', 10000, 0),
+('Wheat flour', 10000, 0),
+('Potato starch', 10000, 0),
+('Marzipan', 10000, 0),
+('Egg whites', 10000, 0),
+('Bread crumbs', 10000, 0),
+('Fine-ground nuts', 10000, 0),
+('Ground, roasted nuts', 10000, 0),
+('Roasted, chopped nuts', 10000, 0);
 
 INSERT INTO Recipies VALUES
 ('Nut ring', 'Flour', 450),
@@ -144,7 +145,7 @@ INSERT INTO Recipies VALUES
 ('Berliner', 'Chocolate', 50 );
 
 INSERT INTO Blocked VALUES
-(NULL, 'Nut ring', NOW(), NOW() + INTERVAL 1 DAY);
+(NULL, 'Nut ring', CURDATE(), CURDATE() + INTERVAL 1 DAY);
 
 INSERT INTO Customers VALUES
 ('Finkakor AB', 'Helsingborg'),
@@ -158,14 +159,13 @@ INSERT INTO Customers VALUES
 
 -- place two orders
 INSERT INTO Orders VALUES
-(NULL, 'Finkakor AB', NOW() + INTERVAL 2 DAY, NULL),
-(NULL, 'Småbröd AB', NOW() + INTERVAL 5 DAY, NULL);
+(NULL, 'Finkakor AB', NOW(), CURDATE() + INTERVAL 2 DAY, NULL);
 
 -- specify how many pallets of each cookie the first order refers to
 INSERT INTO OrderedPallets VALUES
-(1, 'Nut cookie', 7),
-(1, 'Tango', 4),
-(1, 'Berliner', 2);
+(00001, 'Nut cookie', 7),
+(00001, 'Tango', 4),
+(00001, 'Berliner', 2);
 
 -- produce some yummy cookies
 INSERT INTO ProducedPallets VALUES

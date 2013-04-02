@@ -27,14 +27,12 @@ class PalletMapper extends AbstractMapper
 
 	public function fetchProducedPallets()
 	{
-		$sql  = "SELECT * FROM ProducedPallets ";
-		$sql .= "LEFT JOIN Orders USING(order_id) ";
-		$sql .= "{$this->producedBetween()}";
+		$sql  = 'SELECT cookie, order_id, pallet_id, produced, ';
+		$sql .= 'delivered, block_id FROM ProducedPallets ';
+		$sql .= 'LEFT JOIN Orders USING(order_id) ';
+		$sql .= 'LEFT JOIN Blocked using(cookie)';
 
-		$db = $this->getAdapter();
-
-		$stmt = $db->prepare($sql);
-		$stmt->execute();
+		$stmt = $this->getAdapter()->query($sql);
 		
 		return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Krusty\Model\ProducedPallet');
 	}

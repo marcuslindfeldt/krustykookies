@@ -8,7 +8,7 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link rel="stylesheet" href="/css/style.css">
     <link href="/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
-	<script src="http://code.jquery.com/jquery.js"></script>
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
 </head>
 <body>
 	<div id="wrap">
@@ -30,7 +30,7 @@
 					<div class="nav-collapse collapse">
 						<ul class="nav">
 							<li><a id="orders" href="/orders">Orders</a></li>
-							<li><a id="cookies" href="/cookies">Cookies</a></li>
+							<li><a id="cookies" href="/cookies">Products</a></li>
 							<li><a id="customers" href="/customers">Customers</a></li>
 							<li><a id="ingredients" href="/ingredients">Ingredients</a></li>
 							<li><a id="pallets" href="/pallets">Pallets</a></li>

@@ -1,25 +1,28 @@
+<!-- <div class="btn-toolbar clearfix">
+	<div class="btn-group pull-right" data-toggle="buttons-checkbox">
+	  <button type="button" class="btn" name="" id="" disabled><strong>Filter &raquo;</strong></button>
+	  <button type="button" class="btn btn-primary">In storage</button>
+	  <button type="button" class="btn btn-primary">Delivered</button>
+	  <button type="button" class="btn btn-primary">Blocked</button>
+	</div>
+</div> -->
+
 <table class="table table-striped table-bordered">
 <thead>
 	<tr>
-		<th>Pallet Id</th>
-		<th>Order Id</th>
+		<th>Pallet ID</th>
 		<th>Cookie</th>
 		<th>Produced</th>
-		<th>Customer</th>
-		<th>Delivered</th>
-		<th>Location</th>
+		<th class="center-column">Status</th>
 	</tr>
 </thead>	
 <tbody>
 {{#pallets}}
 		<tr>
-			<td>{{pallet_id}}</td>
-			<td>{{order_id}}</td>
+			<td><a href="#">{{pallet_id}}</a></td>
 			<td>{{cookie}}</td>
 			<td>{{produced}}</td>
-			<td>{{customer}}</td>
-			<td></td>
-			<td></td>
+			<td class="center-column"><span class="label label-{{getStatus.label}}">{{getStatus.title}}</span></td>
 		</tr>
 {{/pallets}}
 </tbody>
