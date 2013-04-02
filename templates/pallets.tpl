@@ -25,13 +25,16 @@
 </tbody>
 </table>
 
+{{{pallets_paginator}}}
+
+
 <h2>Produce new pallets</h2>
 <form action="/pallets" method="post" class="form-horizontal well">
 	<fieldset>
 	<div class="control-group">
-		<label class="control-label" for="inputEmail">Product</label>
+		<label class="control-label required" for="cookie">Product</label>
 		<div class="controls">
-			<select class="span3" name="cookies" id="cookies" required>
+			<select class="span3" name="cookies" id="cookie" required>
 				{{#cookies}}
 				<option value="{{cookie}}">{{cookie}}</option>
 				{{/cookies}}
@@ -40,9 +43,9 @@
 		</div>
 	</div>
 	<div class="control-group">
-		<label class="control-label" for="inputEmail">Amount</label>
+		<label class="control-label required" for="amount">Amount</label>
 		<div class="controls">
-			<input type="number" class="span3" name="amount" min="1" max="100" placeholder="amount" required />
+			<input type="number" class="span3" name="amount" id="amount" min="1" max="100" placeholder="amount" required />
 			<span class="help-block">Enter the amount of pallets to produce.</span>
 		</div>
 

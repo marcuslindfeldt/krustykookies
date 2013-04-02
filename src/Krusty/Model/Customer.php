@@ -1,7 +1,9 @@
 <?php
 namespace Krusty\Model;
 
-class Customer
+use \Krusty\Model\AbstractModel;
+
+class Customer extends AbstractModel
 {
 	public $customer;
 	public $address;

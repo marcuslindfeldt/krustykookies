@@ -8,18 +8,16 @@ use \Krusty\Model\Ingredient,
 class IngredientMapper extends AbstractMapper
 {
 	
-	// Should return an ingredient object
-	public function fetch($ingredient = null)
+	// return a collection of ingredients
+	public function fetchAll()
 	{
-		$db = $this->getAdapter();
 		$sql = 'SELECT * FROM Ingredients';
-		if($ingredient === null) {
-			return $db->query($sql)->fetchAll(\PDO::FETCH_CLASS, "\Krusty\Model\Ingredient");
-		}
+
+		$db = $this->getAdapter();
+		$stmt = $db->prepare($sql);
 		
-		$stmt = $db->prepare($sql . ' WHERE ingredient = :ingredient');
-		
-		$stmt->execute(array('ingredient' => $ingredient));
+		$stmt->execute();
+
 		return $stmt->fetchAll(\PDO::FETCH_CLASS, "\Krusty\Model\Ingredient");
 
 	}

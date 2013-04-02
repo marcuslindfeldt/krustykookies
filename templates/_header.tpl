@@ -8,9 +8,8 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link rel="stylesheet" href="/css/style.css">
     <link href="/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
-<!-- 	<link rel="stylesheet" href="/css/reset.css">
-	<link rel="stylesheet" href="/css/style.css" type="text/css" media="screen" />
- --></head>
+	<script src="http://code.jquery.com/jquery.js"></script>
+</head>
 <body>
 	<div id="wrap">
 		<div class="navbar navbar-inverse navbar-fixed-top">
@@ -41,6 +40,23 @@
 			</nav>
 		</div>
 		<div class="container">
+<ul class="breadcrumb">
+  		<li><a href="/">Home</a></li>
+	{{#breadcrumbs}}
+		{{#active}}
+  		<li class="active">
+  			<span class="divider">/</span>
+  			{{title}}
+  		</li>
+  		{{/active}}
+  		{{^active}}
+  		<li>
+  			<span class="divider">/</span>
+  			<a href="/{{uri}}">{{title}}</a>
+  		</li>
+  		{{/active}}
+  	{{/breadcrumbs}}
+</ul>
 		{{#heading}}
 		<header class="page-header">
 		  <h1>{{heading}} {{#subheading}}<small>{{subheading}}</small>{{/subheading}}</h1>

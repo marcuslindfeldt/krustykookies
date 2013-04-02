@@ -6,34 +6,23 @@ use \Krusty\Model\ProducedPallet,
 	\Krusty\Model\OrderedPallet,
 	\Krusty\Model\Mapper\PalletMapper;
 
-class PalletService
+class PalletService extends AbstractService
 {
-	private $mapper;
-
-	public function fetchOrderedPallets(Order $order)
+	public function fetchPalletsForOrder(Order $order)
 	{
-		$mapper = $this->getMapper();
-		return $mapper->fetchOrderedPallets($order);
+		return $this->getMapper()->fetchPalletsForOrder($order);
 	}
 
-	public function fetchProducedPallets($start=null, $end=null, $cookie=null)
+	public function fetchProducedPallets()
 	{
 		$mapper = $this->getMapper();
-		return $mapper->fetchProducedPallets($start, $end, $cookie);
+		$result = $mapper->fetchProducedPallets();
+
+		return $this->createPaginator($result);
 	}
 
-	// simulate pallet creation
 	public function producePallets($data)
 	{
-		$mapper = $this->getMapper();
-		return $mapper->createPallets($data);
-	}
-
-	public function getMapper()
-	{
-		if(is_null($this->mapper)) {
-			$this->mapper = new PalletMapper();
-		}
-		return $this->mapper;
+		return $this->getMapper()->createPallets($data);
 	}
 }

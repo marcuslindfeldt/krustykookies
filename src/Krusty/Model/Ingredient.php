@@ -1,8 +1,9 @@
 <?php
-
 namespace Krusty\Model;
 
-class Ingredient
+use \Krusty\Model\AbstractModel;
+
+class Ingredient extends AbstractModel
 {
 	public $ingredient;
 	public $quantity;

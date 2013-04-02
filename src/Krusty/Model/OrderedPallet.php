@@ -1,8 +1,9 @@
 <?php
-
 namespace Krusty\Model;
 
-class OrderedPallet
+use \Krusty\Model\AbstractModel;
+
+class OrderedPallet extends AbstractModel
 {
 	public $order_id;
 	public $cookie;

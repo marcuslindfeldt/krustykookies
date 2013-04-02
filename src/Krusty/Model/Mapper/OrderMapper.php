@@ -7,54 +7,59 @@ use \Krusty\Model\Order,
 
 class OrderMapper extends AbstractMapper
 {
-	//sets the order with order id $id to delivered=1, does not check the input
-	public function setDelivered($id){
-		
-	}
-	//Adds a new order, does not check for foregin key constraint or check the input
-	public function save($id, $customer, $deadline)
+	public function save(Order $order)
 	{
-		try {
-			$db = $this->getAdapter();
-			$stmt = $db->prepare('INSERT INTO Orders VALUES(:id, :customer, :deadline, null)');
-			$stmtArray=array();
-			$stmtArray['id']=$id;
-			$stmtArray['customer']=$customer;
-			$stmtArray['deadline']=$deadline;
-			$stmt->execute($stmtArray);
-			return true;
-		} catch (Exception $e) {
-			return false;
-		}
-	}
+		$sql  = 'INSERT INTO Orders ';
+		$sql .= 'VALUES(:order_id, :customer, :deadline, null)';
 
-	//Deletes an order with the specific id
-	public function delete($id)
-	{
-		try {
-			$db = $this->getAdapter();
-			$stmt = $db->prepare('DELETE FROM Orders WHERE order_id = :id');
-			$stmtArray=array();
-			$stmtArray['id']=$id;
-			$stmt->execute($stmtArray);
-			return true;
-		} catch (Exception $e) {
-			return false;
-		}
-	}
-
-	// Should return an order object that contains a Customer object
-	public function fetch($id = null)
-	{
 		$db = $this->getAdapter();
-		$sql = 'SELECT * FROM Orders';
-		if($id === null) {
-			return $db->query($sql)->fetchAll(\PDO::FETCH_CLASS, "\Krusty\Model\Order");
-		}
-		$stmt = $db->prepare($sql . ' WHERE order_id = :id');
-		$stmt->execute(array('id' => $id));
-		$stmt->setFetchMode(\PDO::FETCH_CLASS, "\Krusty\Model\Order");
-		return $stmt->fetch();
+		$stmt = $db->prepare($sql);
 
+		return $stmt->execute(array(
+            'order_id' => $order->order_id,
+			'customer' => $order->customer,
+			'deadline' => $order->deadline
+		));
 	}
+
+	public function delete(Order $order)
+	{
+		$sql = 'DELETE FROM Orders WHERE order_id = :order_id';
+
+		$db = $this->getAdapter();
+		$stmt = $db->prepare($sql);
+
+		return $stmt->execute(array(
+      		'order_id' => $order->order_id
+		));
+	}
+
+	public function fetch($id)
+	{
+		$sql  = 'SELECT * FROM Orders ';
+		$sql .= 'WHERE order_id = :order_id';
+
+		$db = $this->getAdapter();
+
+		$stmt = $db->prepare($sql);
+		$stmt->execute(array(
+		   'order_id' => $id
+        ));
+		$stmt->setFetchMode(\PDO::FETCH_CLASS, "\Krusty\Model\Order");
+
+		return $stmt->fetch();
+	}
+	
+	public function fetchAll()
+	{
+		$sql  = 'SELECT * FROM Orders';
+
+		$db = $this->getAdapter();
+
+		$stmt = $db->prepare($sql);
+		$stmt->execute();
+
+		return $stmt->fetchAll(\PDO::FETCH_CLASS, "\Krusty\Model\Order");
+	}
+
 }

@@ -1,7 +1,9 @@
 <?php
 namespace Krusty\Model;
 
-class Cookie
+use \Krusty\Model\AbstractModel;
+
+class Cookie extends AbstractModel
 {
 	public $cookie;
 	public $description;

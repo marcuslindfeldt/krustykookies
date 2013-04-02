@@ -15,3 +15,9 @@
 {{/recipie.ingredients}}
 </tbody>
 </table>
+
+<ul class="pager">
+  <li class="previous">
+    <a href="/cookies">&larr; Back to products</a>
+  </li>
+</ul>

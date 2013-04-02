@@ -1,22 +1,18 @@
 <?php
-
 namespace Krusty\Model;
 
-class Recipie
+use \Krusty\Model\AbstractModel;
+
+class Recipie extends AbstractModel
 {
 	public $name;
 	public $ingredients;
 
 	public function fromArray(array $data)
 	{
-		$attrs = get_object_vars($this);
+		parent::fromArray($data);
 
-		foreach ($data as $key => $value) {
-			if(array_key_exists($key, $attrs)){
-				$this->$key = $value;
-			}
-		}
-
+		//filter empty ingredients
 		$this->ingredients = array_filter($this->ingredients, function($quantity){
 			return $quantity > 0;
 		});

@@ -7,28 +7,25 @@ use \Krusty\Model\Customer,
 
 class CustomerMapper extends AbstractMapper
 {
-	public function save(Customer $id)
+	public function save(Customer $c)
 	{
-		# code...
+		throw new \Exception('Not implemented.');
 	}
 
-	public function delete($id)
+	public function delete(Customer $c)
 	{
-		# code...
+		throw new \Exception('Not implemented.');
 	}
 
-	// return customer or collection of customers
-	public function fetch($id = null)
+	// return collection of customers
+	public function fetchAll()
 	{
-		$db = $this->getAdapter();
 		$sql = 'SELECT * FROM Customers';
-		if($id === null) {
-			return $db->query($sql)->fetchAll(\PDO::FETCH_CLASS, "\Krusty\Model\Customer");
-		}
-		$stmt = $db->prepare($sql . ' WHERE order_id = :id');
-		$arr=array();
-		$arr['id']=$id;
-		$stmt->execute($arr);
+
+		$db = $this->getAdapter();
+		$stmt = $db->prepare($sql);
+		$stmt->execute();
+
 		return $stmt->fetchAll(\PDO::FETCH_CLASS, "\Krusty\Model\Customer");
 	}
 }

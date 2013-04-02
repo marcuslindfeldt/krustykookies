@@ -4,34 +4,17 @@ namespace Krusty\Service;
 use \Krusty\Model\Ingredient,
 	\Krusty\Model\Mapper\IngredientMapper;
 
-class IngredientService
+class IngredientService extends AbstractService
 {
-	private $model;
-	private $mapper;
-
-	public function fetchIngredients($ingredient = null)
+	public function fetchIngredients($options = null)
 	{
 		$mapper = $this->getMapper();
-		return $mapper->fetch($ingredient);
+		$result = $mapper->fetchAll();
+		return $this->createPaginator($result);
 	}
 
-	/**
-	 * Lazy load model
-	 * @return Order the model
-	 */
-	public function getModel()
+	public function addIngredient($data)
 	{
-		if(is_null($model)) {
-			$this->model = new Ingredient();
-		}
-		return $this->model;
-	}
-
-	public function getMapper()
-	{
-		if(is_null($this->mapper)) {
-			$this->mapper = new IngredientMapper();
-		}
-		return $this->mapper;
+		throw new \Exception('Not implemented.');
 	}
 }

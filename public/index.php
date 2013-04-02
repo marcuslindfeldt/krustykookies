@@ -5,7 +5,7 @@ use \Slim\Slim,
 	\Slim\Middleware\SessionCookie,
 	\Slim\Extras\Middleware\StrongAuth,
 	\Krusty\Config,
-	\Krusty\KrustyView;
+	\Krusty\KrustyView;	
 
 define("APPLICATION_PATH", __DIR__ . '/..');
 
@@ -23,10 +23,11 @@ $app->add(new StrongAuth($config->auth));
 
 // Init services
 
-$serviceLocator = function ($name) {
+$serviceLocator = function ($name, array $options = null) {
+
 	$class = '\\Krusty\\Service\\' . ucfirst($name) . 'Service';
 	if(class_exists($class)){
-		return new $class;
+		return new $class($options);
 	} 
 };
 
@@ -75,7 +76,10 @@ $app->get('/orders/:id', function($id) use ($app, $serviceLocator) {
 		//Not found, redirect to 404
 		$app->notFound();
 	}
-	$orderedPallets = $serviceLocator('pallet')->fetchOrderedPallets($order);
+
+	$orderedPallets = $serviceLocator('pallet')
+		->fetchPalletsForOrder($order);
+
 	$app->render('order_details.tpl', array(
 		'order' => $order,
 		'heading' => "Order Details",
@@ -88,14 +92,12 @@ $app->get('/orders/:id', function($id) use ($app, $serviceLocator) {
 $app->get('/cookies', function() use ($app, $serviceLocator){
 	//get cookie array from cookie service
 	$cookies = $serviceLocator('cookie')-> fetchCookies();
-	$ingredients = $serviceLocator('ingredient')->fetchIngredients();
+	$ingredients = $serviceLocator('ingredient')->fetchIngredients()->getAdapter()->getArray();
 	$blocked = $serviceLocator('blocked')->fetchBlocked();
 	$app->render('cookies.tpl', array(
 		'heading' => "Products",
-		'subheading' => "Mmm, yummy KrustyKookies",	             
 		'cookies' => $cookies,
 		'ingredients' => $ingredients,
-		'cookies' => $cookies,
 		'blocked' => $blocked
 	));
 });
@@ -115,25 +117,21 @@ $app->get('/cookies/:id', function ($id) use ($app, $serviceLocator) {
 });
 
 $app->post('/cookies', function() use ($app, $serviceLocator) {
-	// Get the post data
 	$data = $app->request()->post();
-	// Add cookie, create flash message
-	if($serviceLocator('recipie')->addRecipie($data)){
+	try{
+		$serviceLocator('recipie')->addRecipie($data);
 		$app->flash('success', 'You successfully added a new cookie!');
-	}else{
-		// maybe catch exception instead and show more
-		// descriptive message to the user
-		$app->flash('error', 'Oops, something went wrong. Please try again!');
-	$app->redirect('/cookies');
+	}catch (\Exception $e){
+		$app->flash('error', $e->getMessage());
 	}
-	// redirect to show flash message
+	$app->redirect('/cookies');
 });
 
 // Block cookie
 $app->post('/blocked', function() use ($app, $serviceLocator) {
 	$req = $app->request()->post();
 	try{
-		$result = $blockedService->block($req);
+		$result = $serviceLocator('blocked')->block($req);
 		$app->flash('success', "{$result->cookie} has been blocked until {$result->end}.");
 	}catch(\Exception $e){
 		$app->flash('error',"{$e->getMessage()}");
@@ -159,23 +157,30 @@ $app->get('/customers', function() use ($app, $serviceLocator) {
 
 // List all ingredients
 $app->get('/ingredients', function() use ($app, $serviceLocator) {
-	$ingredients = $serviceLocator('ingredient')->fetchIngredients();
+	$options = $app->request()->get();
+	$ingredients = $serviceLocator('ingredient', $options)
+		->fetchIngredients($options);
 	$app->render('ingredients.tpl', array(
 		'heading' => "Ingredients",
-		'ingredients' => $ingredients
+		'ingredients' => $ingredients,
+		'paginate' => array('ingredients')
 	));
 });
 
 // List all pallets in storage, and their status
 $app->get('/pallets', function() use ($app, $serviceLocator)
 {
-	$pallets = $serviceLocator('pallet')->fetchProducedPallets();
+	$options = $app->request()->get();
+	$pallets = $serviceLocator('pallet', $options)
+		->fetchProducedPallets();
+
 	$cookies = $serviceLocator('cookie')->fetchCookies();
 	$app->render('pallets.tpl', array(
 		'heading' => "Pallets",
 		'subheading' => "view & track produced cookie pallets",
 		'pallets' => $pallets,
-		'cookies' => $cookies
+		'cookies' => $cookies,
+		'paginate' => array('pallets')
 	));
 });
 

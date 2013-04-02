@@ -22,10 +22,17 @@
 	<fieldset>
 		<legend>Product details</legend>
 		<div class="control-group">
-			<label class="control-label" for="name">Name</label>
+			<label class="control-label required" for="name">Name</label>
 			<div class="controls">
-				<input type="text" name="name" required />
+				<input type="text" name="name" id="name" required />
 				<span class="help-block">Choose a name for your product</span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="description">Description</label>
+			<div class="controls">
+				<input type="text" name="description" id="description" />
+				<span class="help-block">Optional</span>
 			</div>
 		</div>
 	</fieldset>
@@ -35,7 +42,7 @@
 		<div class="control-group">
 			<label class="control-label" for="ingredients[{{ingredient}}]">{{ingredient}}</label>
 			<div class="controls">
-				<input type="number" name ="ingredients[{{ingredient}}]" min="0" value="0">
+				<input type="number" name ="ingredients[{{ingredient}}]" id="ingredients[{{ingredient}}]" min="0" value="0">
 			</div>
 		</div>
 	{{/ingredients}}
@@ -75,12 +82,11 @@
   </tbody>
 </table>
 
-
 <form action="/blocked" method="post" class="form-horizontal well">
 	<fieldset>
 		<legend>Create a new block</legend>
 		<div class="control-group">
-			<label class="control-label" for="cookie">Product</label>
+			<label class="control-label required" for="cookie">Product</label>
 			<div class="controls">
 				<select name="cookie" id="cookie" required>
 					{{#cookies}}
@@ -90,7 +96,7 @@
 			</div>
 		</div>	
 		<div class="control-group">
-			<label class="control-label" for="end">Block release date</label>
+			<label class="control-label required" for="end">Block release date</label>
 			<div class="controls">
 				<input type="text" name="end" id="end" placeholder="DD/MM/YYYY" required />
 			</div>
@@ -102,8 +108,6 @@
 </form>
 
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
-<script src="http://code.jquery.com/jquery-1.9.1.js" 
-        type="text/javascript"></script>
 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" 
         type="text/javascript"></script>
 <script type="text/javascript">

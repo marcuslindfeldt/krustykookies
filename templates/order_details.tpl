@@ -38,3 +38,9 @@
 {{/pallets}}
 </tbody>
 </table>
+
+<ul class="pager">
+  <li class="previous">
+    <a href="/orders">&larr; Back to orders</a>
+  </li>
+</ul>

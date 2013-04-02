@@ -4,20 +4,18 @@ namespace Krusty\Service;
 use \Krusty\Model\Blocked,
 	\Krusty\Model\Mapper\BlockedMapper;
 
-class BlockedService
+class BlockedService extends AbstractService
 {
-	private $model;
-	private $mapper;
+	public function fetchBlocked()
+	{
+		return $this->getMapper()->fetchAll();
+	}
 
-	public function fetchBlocked($block_id = null)
+	public function block(array $data) 
 	{
 		$mapper = $this->getMapper();
-		return $mapper->fetch($block_id);
-	}
-	public function block(array $data) {
-		$mapper = $this->getMapper();
 		$model = $this->getModel();
-		var_dump( $data);
+
 		//validate end date
 		$date = explode('-', $data['end']);
 		if(count($date) != 3 || 
@@ -25,30 +23,19 @@ class BlockedService
 		{
 			return false;
 		}
+
 		$model->fromArray($data);
+		
 		return $mapper->block($model);
 	}
-	public function unblock($blocked_id){
-		$mapper=$this->getMapper();
-		return $mapper->unblock($blocked_id);
-	}
-	/**
-	 * Lazy load model
-	 * @return Order the model
-	 */
-	public function getModel()
-	{
-		if(is_null($this->model)) {
-			$this->model = new Blocked();
-		}
-		return $this->model;
-	}
 
-	public function getMapper()
+	public function unblock($blocked_id)
 	{
-		if(is_null($this->mapper)) {
-			$this->mapper = new BlockedMapper();
+		//validate post data
+		if (!intval($blocked_id)) {
+			throw new Exception('Invalid input.');
 		}
-		return $this->mapper;
+
+		return $this->getMapper()->unblock($blocked_id);
 	}
 }

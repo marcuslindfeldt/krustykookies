@@ -77,7 +77,8 @@ footer {
   margin-bottom: 10px;
 }
 .form-signin input[type="text"],
-.form-signin input[type="password"] {
+.form-signin input[type="password"],
+.form-signin button {
   font-size: 16px;
   height: auto;
   margin-bottom: 15px;
@@ -89,4 +90,9 @@ footer {
 
 table .center-column{
   text-align:center;
+}
+
+.required:after {
+  color:red;
+  content:' *';
 }

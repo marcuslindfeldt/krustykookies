@@ -4,47 +4,24 @@ namespace Krusty\Service;
 use \Krusty\Model\Order,
 	\Krusty\Model\Mapper\OrderMapper;
 
-class OrderService
+class OrderService extends AbstractService
 {
-	private $model;
-	private $mapper;
-
 	public function fetchOrders($id = null)
 	{
 		$mapper = $this->getMapper();
-		return $mapper->fetch($id);
+
+		return (is_null($id))
+			 ? $mapper->fetchAll()
+			 : $mapper->fetch($id);
 	}
 
 	public function putOrder(Order $order)
 	{
-		$order = $this->getModel();
-		//init order mapper
-		//let mapper put order in the db
-		//return status
+		throw new \Exception('Not implemented.');
 	}
 
 	public function deleteOrder(Order $order)
 	{
-		# code...
-	}
-
-	/**
-	 * Lazy load model
-	 * @return Order the model
-	 */
-	public function getModel()
-	{
-		if(is_null($model)) {
-			$this->model = new Order();
-		}
-		return $this->model;
-	}
-
-	public function getMapper()
-	{
-		if(is_null($this->mapper)) {
-			$this->mapper = new OrderMapper();
-		}
-		return $this->mapper;
+		throw new \Exception('Not implemented.');
 	}
 }

@@ -8,42 +8,39 @@ use \Krusty\Model\ProducedPallet,
 
 class PalletMapper extends AbstractMapper
 {
-	public function fetchOrderedPallets(Order $order)
+	protected $start;
+	protected $end;
+
+	public function fetchPalletsForOrder(Order $order)
 	{
+		$sql  = 'SELECT * FROM OrderedPallets ';
+		$sql .= 'WHERE order_id = :order_id ';
+
 		$db = $this->getAdapter();
-		$sql = 'SELECT * FROM OrderedPallets WHERE order_id = :order_id';
 		$stmt = $db->prepare($sql);
-		$stmt->execute(array('order_id' => $order->order_id));
+		$stmt->execute(array(
+			'order_id' => $order->order_id
+		));
+		
 		return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Krusty\Model\OrderedPallet');
 	}
 
-	public function fetchProducedPallets($start=null, $end=null, $cookie=null)
+	public function fetchProducedPallets()
 	{
-		
+		$sql  = "SELECT * FROM ProducedPallets ";
+		$sql .= "LEFT JOIN Orders USING(order_id) ";
+		$sql .= "{$this->producedBetween()}";
+
 		$db = $this->getAdapter();
-		$sql = 'SELECT * FROM ProducedPallets left join Orders using(order_id)';
-		if($start!=null&&$end!=null){
-			$sql.=' where produced>=:start and produced<=:end';
-			if($cookie!=null){
-				$sql.=' and cookie=:cookie';
-				$stmt = $db->prepare($sql);
-				$stmt->execute(array('start' => $start, 'end' => $end, 'cookie' => $cookie));
-			}else{
-				$stmt = $db->prepare($sql);
-				$stmt->execute(array('start' => $start, 'end' => $end));
-			}
-		}else{
-			$stmt = $db->prepare($sql);
-			$stmt->execute();
-		}
-		
-// 		$sql = 'SELECT * FROM ProducedPallets';
+
+		$stmt = $db->prepare($sql);
+		$stmt->execute();
 		
 		return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Krusty\Model\ProducedPallet');
 	}
 
-	// produce some new pallets
-	public function createPallets($data)
+	// simulate production of new pallets
+	public function createPallets(array $data)
 	{
 		$query  = "INSERT INTO ProducedPallets (cookie, produced)";
 		$query .= "VALUES (:cookie, NOW())";
@@ -53,7 +50,6 @@ class PalletMapper extends AbstractMapper
 			$db->beginTransaction();
 
 			$stmt = $db->prepare($query);
-			
 			for($i = 0; $i < $data['amount']; $i++){
 				$stmt->execute(array(
 					'cookie' => $data['cookies']
@@ -63,6 +59,13 @@ class PalletMapper extends AbstractMapper
 		}catch(\PDOException $e){
 			$db->rollBack();
 			throw new \Exception($e->getMessage());
+		}
+	}
+
+	protected function producedBetween()
+	{
+		if(isset($this->start) && isset($this->end)){
+			return "WHERE produced BETWEEN '{$this->start}' AND '{$this->end}' ";
 		}
 	}
 }

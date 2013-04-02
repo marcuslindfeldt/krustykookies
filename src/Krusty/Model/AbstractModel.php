@@ -4,7 +4,7 @@ namespace Krusty\Model;
 /**
 * Abstract model with some utility methods
 */
-abstract class AbstractModel
+abstract class AbstractModel implements \JsonSerializable
 {
 	
 	public function fromArray(array $data)
@@ -16,5 +16,16 @@ abstract class AbstractModel
 				$this->$key = $value;
 			}
 		}
+		return $this;
+	}
+
+	public function toArray()
+	{
+		return get_object_vars($this);	
+	}
+
+	public function jsonSerialize()
+	{
+		return $this->toArray();
 	}
 }

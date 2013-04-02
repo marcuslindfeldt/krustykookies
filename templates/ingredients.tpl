@@ -18,3 +18,4 @@
 {{/ingredients}}
 </tbody>
 </table>
+{{{ingredients_paginator}}}

@@ -2,7 +2,7 @@
 
 namespace Krusty\Model;
 
-class ProducedPallet
+class ProducedPallet extends AbstractModel
 {
 	public $pallet_id;
 	public $order_id;

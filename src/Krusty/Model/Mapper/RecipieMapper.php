@@ -28,7 +28,6 @@ class RecipieMapper extends AbstractMapper
 	public function save(Recipie $r)
 	{
 
-		var_dump($r);
 		// cookie table sql
 		$query1 = 'INSERT INTO Cookies VALUES (:name, :desc)';
 		// recipie table sql
@@ -56,7 +55,7 @@ class RecipieMapper extends AbstractMapper
 			return $db->commit();
 		}catch (\Exception $e){
 			$db->rollBack();
-			return false;
+			throw new \Exception($e->getMessage());
 		}
 	}
 }
