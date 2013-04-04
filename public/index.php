@@ -108,6 +108,7 @@ $app->get('/orders/:id', function($id) use ($app, $serviceLocator) {
 // Deliver order
 $app->post('/orders/:id', function($id) use ($app, $serviceLocator) {
 	try{
+		
 		$serviceLocator('order')->deliverOrder($id);
 		$app->flash('success', 'Order has been delivered');
 	}catch (\Exception $e){
