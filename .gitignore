@@ -1,6 +1,6 @@
 # Krusty kookies specific
 logs/*.log
-config/*
+
 
 # Composer
 vendor/
