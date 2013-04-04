@@ -3,8 +3,8 @@
 namespace Krusty\Model\Mapper;
 
 use \Krusty\Model\ProducedPallet,
-	\Krusty\Model\Order,
-	\Krusty\Model\Mapper\AbstractMapper;
+\Krusty\Model\Order,
+\Krusty\Model\Mapper\AbstractMapper;
 
 class PalletMapper extends AbstractMapper
 {
@@ -21,21 +21,42 @@ class PalletMapper extends AbstractMapper
 		$stmt->execute(array(
 			'order_id' => $order->order_id
 		));
-		
+
 		return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Krusty\Model\OrderedPallet');
 	}
 
-	public function fetchProducedPallets()
+	public function fetchProducedPallets(array $options=null)
 	{
+
+		$db = $this->getAdapter();
 		$sql  = 'SELECT cookie, order_id, pallet_id, produced, ';
 		$sql .= 'delivered, block_id FROM ProducedPallets ';
 		$sql .= 'LEFT JOIN Orders USING(order_id) ';
 		$sql .= 'LEFT JOIN Blocked using(cookie)';
-
-		$stmt = $this->getAdapter()->query($sql);
-		
+		if(isset($options['start'])&&isset($options['end'])){
+			$sql.=' where produced>=:start and produced<=:end';
+			$stmt = $db->prepare($sql);
+			$stmt->execute(array('start' => $options['start'], 'end' => $options['end']));
+		}else if(isset($options['cookie'])){
+			$sql.=' where cookie=:cookie';
+			$stmt = $db->prepare($sql);
+			$stmt->execute(array('cookie' => $options['cookie']));
+		}else if(isset($options['blocked'])){
+			$sql.=' where block_id=:blocked';
+			$stmt = $db->prepare($sql);
+			$stmt->execute(array('blocked' => $options['blocked']));
+		}else{
+			$stmt = $db->prepare($sql);
+			$stmt->execute();
+		}	
 		return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Krusty\Model\ProducedPallet');
 	}
+
+
+
+
+
+
 
 	// simulate production of new pallets
 	public function createPallets(array $data)

@@ -213,7 +213,7 @@ $app->get('/pallets', function() use ($app, $serviceLocator)
 {
 	$options = $app->request()->get();
 	$pallets = $serviceLocator('pallet', $options)
-		->fetchProducedPallets();
+		->fetchProducedPallets($options);
 
 	$cookies = $serviceLocator('cookie')->fetchCookies();
 	$app->render('pallets.tpl', array(
@@ -238,6 +238,7 @@ $app->post('/pallets', function () use ($app, $serviceLocator)
 	}
 	$app->redirect('/pallets');
 });
+
 		
 // Define more routes
 // ...

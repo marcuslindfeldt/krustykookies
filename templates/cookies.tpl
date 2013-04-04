@@ -18,7 +18,7 @@
 			<td>{{getDescription}}</td>
 			<td class="center-column">
 				{{#inStorage}}
-				{{in_store}}
+				<a href="/pallets?cookie={{getId}}">{{in_store}}</a>
 				{{/inStorage}}
 				{{^inStorage}}
 				<span class="label label-warning">Sold out!</span>
@@ -72,7 +72,7 @@
       <th>Product</th>
       <th>Block start date</th>
       <th>Block release date</th>
-      <th class="center-column">Release block</th>
+      <th class="center-column">Blocked pallets</th>
     </tr>
   </thead>
   <tbody>
@@ -82,7 +82,7 @@
       <td>{{start}}</td>
       <td>{{end}}</td>
       <td class="center-column">
-      	<button class="unblock btn btn-inverse" value="{{cookie}}">Unblock</button>
+      		<a href="/pallets?blocked={{block_id}}">view</a>
       </td>
     </tr>
     {{/blocked}}
