@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 5.5.29, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: krusty
+-- Host: puccini.cs.lth.se    Database: db65
 -- ------------------------------------------------------
--- Server version	5.5.29-0ubuntu0.12.10.1
+-- Server version	5.5.18
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -30,7 +30,7 @@ CREATE TABLE `blocked` (
   PRIMARY KEY (`block_id`),
   UNIQUE KEY `cookie` (`cookie`,`start`,`end`),
   CONSTRAINT `blocked_ibfk_1` FOREIGN KEY (`cookie`) REFERENCES `cookies` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `blocked` (
 
 LOCK TABLES `blocked` WRITE;
 /*!40000 ALTER TABLE `blocked` DISABLE KEYS */;
-INSERT INTO `blocked` VALUES (00001,'Nut cookie','2013-04-02','2013-04-06');
+INSERT INTO `blocked` VALUES (00002,'Almond delight','2013-04-08','2013-04-10'),(00001,'Nut cookie','2013-04-02','2013-04-06');
 /*!40000 ALTER TABLE `blocked` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -87,7 +87,7 @@ CREATE TABLE `customers` (
 
 LOCK TABLES `customers` WRITE;
 /*!40000 ALTER TABLE `customers` DISABLE KEYS */;
-INSERT INTO `customers` VALUES ('Bjudkakor AB','Ystad'),('Finkakor AB','Helsingborg'),('Gästkakor AB','Hässleholm'),('Kaffebröd AB','Landskrona'),('Kalaskakor AB','Trelleborg'),('Partykakor AB','Kristianstad'),('Skånekakor AB','Perstorp'),('Småbröd AB','Malmö');
+INSERT INTO `customers` VALUES ('Bjudkakor AB','Ystad'),('Finkakor AB','Helsingborg'),('GÃ¤stkakor AB','HÃ¤ssleholm'),('KaffebrÃ¶d AB','Landskrona'),('Kalaskakor AB','Trelleborg'),('Partykakor AB','Kristianstad'),('SkÃ¥nekakor AB','Perstorp'),('SmÃ¥brÃ¶d AB','MalmÃ¶');
 /*!40000 ALTER TABLE `customers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -114,7 +114,7 @@ CREATE TABLE `ingredients` (
 
 LOCK TABLES `ingredients` WRITE;
 /*!40000 ALTER TABLE `ingredients` DISABLE KEYS */;
-INSERT INTO `ingredients` VALUES ('Bread crumbs',10000,'','2013-04-05 17:52:46',0),('Butter',10000,'','2013-04-05 17:52:46',0),('Chocolate',10000,'','2013-04-05 17:52:46',0),('Chopped almonds',10000,'','2013-04-05 17:52:46',0),('Cinnamon',10000,'','2013-04-05 17:52:46',0),('Egg whites',10000,'','2013-04-05 17:52:46',0),('Eggs',10000,'','2013-04-05 17:52:46',0),('Fine-ground nuts',10000,'','2013-04-05 17:52:46',0),('Flour',10000,'','2013-04-05 17:52:46',0),('Ground, roasted nuts',10000,'','2013-04-05 17:52:46',0),('Icing sugar',10000,'','2013-04-05 17:52:46',0),('Marzipan',10000,'','2013-04-05 17:52:46',0),('Potato starch',10000,'','2013-04-05 17:52:46',0),('Roasted, chopped nuts',10000,'','2013-04-05 17:52:46',0),('Sodium bicarbonate',10000,'','2013-04-05 17:52:46',0),('Sugar',10000,'','2013-04-05 17:52:46',0),('Vanilla',10000,'','2013-04-05 17:52:46',0),('Vanilla sugar',10000,'','2013-04-05 17:52:46',0),('Wheat flour',10000,'','2013-04-05 17:52:46',0);
+INSERT INTO `ingredients` VALUES ('Bread crumbs',10075,'','2013-04-05 23:40:11',125),('Butter',5250,'','2013-04-05 23:40:23',450),('Chocolate',9900,'','2013-04-05 23:40:11',50),('Chopped almonds',8047,'','2013-04-05 22:35:48',837),('Cinnamon',9930,'','2013-04-05 22:35:48',30),('Egg whites',8200,'','2013-04-05 23:40:11',1800),('Eggs',8450,'','2013-04-05 23:39:49',50),('Fine-ground nuts',9250,'','2013-04-05 23:40:11',750),('Flour',5500,'','2013-04-05 23:40:23',450),('Ground, roasted nuts',9375,'','2013-04-05 23:40:11',625),('Icing sugar',9710,'','2013-04-05 23:40:23',190),('Marzipan',5500,'','2013-04-05 22:24:37',1500),('Potato starch',9850,'','2013-04-05 22:24:37',50),('Roasted, chopped nuts',9775,'','2013-04-05 23:40:23',225),('Sodium bicarbonate',9988,'','2013-04-05 22:25:01',4),('Sugar',6985,'','2013-04-05 23:40:11',375),('Vanilla',9994,'','2013-04-05 22:25:01',2),('Vanilla sugar',9995,'','2013-04-05 23:39:49',5),('Wheat flour',9850,'','2013-04-05 22:24:37',50);
 /*!40000 ALTER TABLE `ingredients` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -142,7 +142,7 @@ CREATE TABLE `ordered_pallets` (
 
 LOCK TABLES `ordered_pallets` WRITE;
 /*!40000 ALTER TABLE `ordered_pallets` DISABLE KEYS */;
-INSERT INTO `ordered_pallets` VALUES (1,'Berliner',2),(1,'Nut cookie',7),(1,'Tango',4);
+INSERT INTO `ordered_pallets` VALUES (2,'Almond delight',2),(3,'Almond delight',12),(4,'Almond delight',1),(5,'Almond delight',2),(1,'Berliner',2),(1,'Nut cookie',7),(2,'Nut cookie',14),(2,'Nut ring',2),(5,'Nut ring',4),(1,'Tango',4),(2,'Tango',3);
 /*!40000 ALTER TABLE `ordered_pallets` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -162,7 +162,7 @@ CREATE TABLE `orders` (
   PRIMARY KEY (`order_id`),
   KEY `customer` (`customer`),
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`customer`) REFERENCES `customers` (`customer`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -171,7 +171,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (00001,'Finkakor AB','2013-04-05 19:52:46','2013-04-07',NULL);
+INSERT INTO `orders` VALUES (00001,'Finkakor AB','2013-04-05 19:52:46','2013-04-07','2013-04-05'),(00002,'Bjudkakor AB','2013-04-05 21:02:35','2013-04-09',NULL),(00003,'Bjudkakor AB','2013-04-05 21:15:17','2013-04-10',NULL),(00004,'Kalaskakor AB','2013-04-05 21:16:18','2013-04-16','2013-04-05'),(00005,'KaffebrÃ¶d AB','2013-04-06 01:36:35','2013-04-07',NULL);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -192,7 +192,7 @@ CREATE TABLE `produced_pallets` (
   KEY `cookie` (`cookie`),
   CONSTRAINT `produced_pallets_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`),
   CONSTRAINT `produced_pallets_ibfk_2` FOREIGN KEY (`cookie`) REFERENCES `cookies` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -201,7 +201,7 @@ CREATE TABLE `produced_pallets` (
 
 LOCK TABLES `produced_pallets` WRITE;
 /*!40000 ALTER TABLE `produced_pallets` DISABLE KEYS */;
-INSERT INTO `produced_pallets` VALUES (00001,NULL,'Nut ring','2013-04-05 19:52:46'),(00002,NULL,'Nut ring','2013-04-01 19:52:46'),(00003,NULL,'Nut ring','2013-04-01 19:52:46'),(00004,NULL,'Nut ring','2013-04-05 19:52:46'),(00005,NULL,'Nut ring','2013-04-05 19:52:46'),(00006,NULL,'Nut cookie','2013-03-22 19:52:46'),(00007,NULL,'Nut cookie','2013-03-26 19:52:46'),(00008,NULL,'Nut cookie','2013-03-27 19:52:46'),(00009,NULL,'Nut cookie','2013-03-27 19:52:46'),(00010,NULL,'Nut cookie','2013-03-27 19:52:46'),(00011,NULL,'Nut cookie','2013-03-27 19:52:46'),(00012,NULL,'Nut cookie','2013-03-27 19:52:46'),(00013,NULL,'Nut cookie','2013-03-28 19:52:46'),(00014,NULL,'Nut cookie','2013-03-29 19:52:46'),(00015,NULL,'Nut cookie','2013-03-29 19:52:46'),(00016,NULL,'Nut cookie','2013-03-29 19:52:46'),(00017,NULL,'Nut cookie','2013-03-30 19:52:46'),(00018,NULL,'Nut cookie','2013-03-31 19:52:46'),(00019,NULL,'Nut cookie','2013-04-01 19:52:46'),(00020,NULL,'Nut cookie','2013-04-02 19:52:46'),(00021,NULL,'Nut cookie','2013-04-03 19:52:46'),(00022,NULL,'Nut cookie','2013-04-03 19:52:46'),(00023,NULL,'Nut cookie','2013-04-04 19:52:46'),(00024,NULL,'Nut cookie','2013-04-05 19:52:46'),(00025,NULL,'Nut cookie','2013-04-05 19:52:46'),(00026,NULL,'Amneris','2013-04-04 19:52:46'),(00027,NULL,'Amneris','2013-04-04 19:52:46'),(00028,NULL,'Amneris','2013-04-05 19:52:46'),(00029,NULL,'Tango','2013-04-02 19:52:46'),(00030,NULL,'Tango','2013-04-02 19:52:46'),(00031,NULL,'Tango','2013-04-04 19:52:46'),(00032,NULL,'Tango','2013-04-05 19:52:46'),(00033,NULL,'Tango','2013-04-05 19:52:46'),(00034,NULL,'Tango','2013-04-05 19:52:46'),(00035,NULL,'Tango','2013-04-05 19:52:46'),(00036,NULL,'Almond delight','2013-04-05 19:52:46'),(00037,NULL,'Almond delight','2013-04-05 19:52:46'),(00038,NULL,'Berliner','2013-03-29 19:52:46'),(00039,NULL,'Berliner','2013-04-01 19:52:46'),(00040,NULL,'Berliner','2013-04-01 19:52:46'),(00041,NULL,'Berliner','2013-04-01 19:52:46'),(00042,NULL,'Berliner','2013-04-04 19:52:46'),(00043,NULL,'Berliner','2013-04-04 19:52:46'),(00044,NULL,'Berliner','2013-04-04 19:52:46'),(00045,NULL,'Berliner','2013-04-05 19:52:46'),(00046,NULL,'Berliner','2013-04-05 19:52:46'),(00047,NULL,'Berliner','2013-04-05 19:52:46'),(00048,NULL,'Berliner','2013-04-05 19:52:46');
+INSERT INTO `produced_pallets` VALUES (00001,NULL,'Nut ring','2013-04-05 19:52:46'),(00002,NULL,'Nut ring','2013-04-01 19:52:46'),(00003,NULL,'Nut ring','2013-04-01 19:52:46'),(00004,NULL,'Nut ring','2013-04-05 19:52:46'),(00005,NULL,'Nut ring','2013-04-05 19:52:46'),(00006,1,'Nut cookie','2013-03-22 19:52:46'),(00007,1,'Nut cookie','2013-03-26 19:52:46'),(00008,1,'Nut cookie','2013-03-27 19:52:46'),(00009,1,'Nut cookie','2013-03-27 19:52:46'),(00010,1,'Nut cookie','2013-03-27 19:52:46'),(00011,1,'Nut cookie','2013-03-27 19:52:46'),(00012,1,'Nut cookie','2013-03-27 19:52:46'),(00013,NULL,'Nut cookie','2013-03-28 19:52:46'),(00014,NULL,'Nut cookie','2013-03-29 19:52:46'),(00015,NULL,'Nut cookie','2013-03-29 19:52:46'),(00016,NULL,'Nut cookie','2013-03-29 19:52:46'),(00017,NULL,'Nut cookie','2013-03-30 19:52:46'),(00018,NULL,'Nut cookie','2013-03-31 19:52:46'),(00019,NULL,'Nut cookie','2013-04-01 19:52:46'),(00020,NULL,'Nut cookie','2013-04-02 19:52:46'),(00021,NULL,'Nut cookie','2013-04-03 19:52:46'),(00022,NULL,'Nut cookie','2013-04-03 19:52:46'),(00023,NULL,'Nut cookie','2013-04-04 19:52:46'),(00024,NULL,'Nut cookie','2013-04-05 19:52:46'),(00025,NULL,'Nut cookie','2013-04-05 19:52:46'),(00026,NULL,'Amneris','2013-04-04 19:52:46'),(00027,NULL,'Amneris','2013-04-04 19:52:46'),(00028,NULL,'Amneris','2013-04-05 19:52:46'),(00029,1,'Tango','2013-04-02 19:52:46'),(00030,1,'Tango','2013-04-02 19:52:46'),(00031,1,'Tango','2013-04-04 19:52:46'),(00032,1,'Tango','2013-04-05 19:52:46'),(00033,NULL,'Tango','2013-04-05 19:52:46'),(00034,NULL,'Tango','2013-04-05 19:52:46'),(00035,NULL,'Tango','2013-04-05 19:52:46'),(00036,4,'Almond delight','2013-04-05 19:52:46'),(00037,NULL,'Almond delight','2013-04-05 19:52:46'),(00038,1,'Berliner','2013-03-29 19:52:46'),(00039,1,'Berliner','2013-04-01 19:52:46'),(00040,NULL,'Berliner','2013-04-01 19:52:46'),(00041,NULL,'Berliner','2013-04-01 19:52:46'),(00042,NULL,'Berliner','2013-04-04 19:52:46'),(00043,NULL,'Berliner','2013-04-04 19:52:46'),(00044,NULL,'Berliner','2013-04-04 19:52:46'),(00045,NULL,'Berliner','2013-04-05 19:52:46'),(00046,NULL,'Berliner','2013-04-05 19:52:46'),(00047,NULL,'Berliner','2013-04-05 19:52:46'),(00048,NULL,'Berliner','2013-04-05 19:52:46'),(00049,NULL,'Almond delight','2013-04-05 23:49:41'),(00050,NULL,'Almond delight','2013-04-05 23:49:41'),(00051,NULL,'Amneris','2013-04-06 00:13:21'),(00052,NULL,'Amneris','2013-04-06 00:13:21'),(00053,NULL,'Amneris','2013-04-06 00:23:19'),(00054,NULL,'Amneris','2013-04-06 00:23:19'),(00055,NULL,'Almond delight','2013-04-06 00:23:24'),(00056,NULL,'Almond delight','2013-04-06 00:23:24'),(00057,NULL,'Almond delight','2013-04-06 00:23:24'),(00058,NULL,'Amneris','2013-04-06 00:24:37'),(00059,NULL,'Amneris','2013-04-06 00:24:37'),(00060,NULL,'Almond delight','2013-04-06 00:24:45'),(00061,NULL,'Tango','2013-04-06 00:25:02'),(00062,NULL,'Almond delight','2013-04-06 00:35:48'),(00063,NULL,'Almond delight','2013-04-06 00:35:48'),(00064,NULL,'Almond delight','2013-04-06 00:35:48'),(00065,NULL,'Berliner','2013-04-06 01:39:50'),(00066,NULL,'Nut cookie','2013-04-06 01:40:11'),(00067,NULL,'Nut ring','2013-04-06 01:40:23');
 /*!40000 ALTER TABLE `produced_pallets` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -242,4 +242,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-04-05 19:53:38
+-- Dump completed on 2013-04-06  1:38:15
