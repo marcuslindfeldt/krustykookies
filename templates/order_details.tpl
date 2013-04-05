@@ -30,7 +30,7 @@
 </tbody>
 <tbody>
 	<tr>
-		<th colspan="2">Ordered Cookies</th>
+		<th colspan="2">Ordered Cookies <small><a href="/pallets?order_id={{order.order_id}}">view pallets</a></small></th>
 	</tr>
 	<tr>
 		<th class="muted">Name</th>
@@ -41,7 +41,7 @@
 {{#pallets}}
 	<tr>
 		<td>{{{cookie}}}</td>
-		<td>{{quantity}}</td>
+		<td><a href="/pallets?cookie={{cookie}}&order_id={{order.order_id}}">{{quantity}}</a></td>
 	</tr>
 {{/pallets}}
 </tbody>

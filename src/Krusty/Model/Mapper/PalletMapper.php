@@ -40,8 +40,6 @@ class PalletMapper extends AbstractMapper
 		$params = array();
 		$criteria = array();
 
-		// var_dump($filters);
-		
 		if(!empty($filters['start'])){
 			$params['start'] = $filters['start'];
 			array_push($criteria, 'DATE(produced) >= :start');
@@ -53,6 +51,10 @@ class PalletMapper extends AbstractMapper
 		if(!empty($filters['cookie'])){
 			$params['cookie'] = $filters['cookie'];
 			array_push($criteria, 'pp.cookie = :cookie');
+		}
+		if(!empty($filters['order_id'])){
+			$params['order_id'] = $filters['order_id'];
+			array_push($criteria, 'order_id = :order_id');
 		}
 		if(!empty($filters['status'])){
 			switch ($filters['status']) {
