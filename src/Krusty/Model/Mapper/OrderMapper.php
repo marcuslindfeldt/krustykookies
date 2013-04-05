@@ -48,9 +48,7 @@ class OrderMapper extends AbstractMapper
 			$db = $this->getAdapter();
 
 			// start transaction
-			$sql= 'start transaction';
-			$stmt = $db->prepare($sql);
-			$stmt->execute();
+			$db->beginTransaction();
 
 			//Get order info
 			$sql  = 'SELECT * FROM OrderedPallets ';
@@ -68,7 +66,7 @@ class OrderMapper extends AbstractMapper
 
 			//Check resultset to se that there is enough products in storage
 			$cookieChecked=0;
-			while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			while ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
 				$db_cookie=$row[0];
 				$db_quantity=$row[1];
 
@@ -78,14 +76,14 @@ class OrderMapper extends AbstractMapper
 					if($o_cookie==$db_cookie){//this is a cookie that is in the order
 						$cookieChecked++;
 						if($db_quantity<$o_quantity){
-							throw new \Excetion;
+							throw new \Exception;
 						}
 					}
 
 				}
 			}
 			if($cookieChecked!=count($order->orderedPallets)){
-				throw new \Excetion;
+				throw new \Exception;
 			}
 
 			//assign pallets to order
@@ -108,18 +106,15 @@ class OrderMapper extends AbstractMapper
 			$sql .= 'SET delivered = NOW()';
 			$sql .= 'WHERE order_id = :order_id';
 
-			$db = $this->getAdapter();
 			$stmt = $db->prepare($sql);
 			
+			$result=$stmt->execute($order->toArray(array('order_id')));
+
 			//commit changes
-			$sql= 'commit';
-			$stmt = $db->prepare($sql);
-			$stmt->execute();
-			return $stmt->execute($order->toArray(array('order_id')));
+			$db->commit();
+			return $result;
 		}catch(\Exception $e){//if there is not enough cookies, make rollback
-			$sql= 'rollback';
-			$stmt = $db->prepare($sql);
-			$stmt->execute();
+			$db->rollBack();
 		}		
 	}
 
