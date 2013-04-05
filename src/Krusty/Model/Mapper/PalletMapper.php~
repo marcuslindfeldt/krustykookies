@@ -127,8 +127,6 @@ class PalletMapper extends AbstractMapper
 			}
 			//om det finns, uppdatera ingridients
 			$sql="update Recipies r LEFT JOIN Ingredients i USING(ingredient) SET 				i.quantity=i.quantity-:amount*r.quantity where cookie=:cookie";
-			$stmt = $db->prepare($sql);
-			$stmt->execute(array('cookie' => $data['cookies'], 'amount' => $data			['amount']));
 			//lägg till pallts
 					
 			$query  = "INSERT INTO ProducedPallets (cookie, produced)";

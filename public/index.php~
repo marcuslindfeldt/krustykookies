@@ -270,7 +270,7 @@ $app->post('/pallets', function () use ($app, $serviceLocator)
 	try{
 		$data = $app->request()->post();
 		$serviceLocator('pallet')->producePallets($data);
-		//$plural = ($data['amount'] > 1) ? 's' : '';
+		$plural = ($data['amount'] > 1) ? 's' : '';
 		//$app->flash('sUccess', "Produced {$data['amount']} pallet{$plural} of {$data['cookies']} cookies.");
 	}catch(Exception $e){
 		$app->flash('error', "{$e->getMessage()}");
