@@ -9,5 +9,5 @@ class Ingredient extends AbstractModel
 	public $quantity;
 	public $description;
 	public $modified;
-	public $lastAddition;
+	public $latest_withdrawal;
 }

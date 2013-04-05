@@ -19,8 +19,8 @@ class PalletMapper extends AbstractMapper
 		$db = $this->getAdapter();
 		$stmt = $db->prepare($sql);
 		$stmt->execute(array(
-			'order_id' => $order->order_id
-		));
+		               'order_id' => $order->order_id
+		               ));
 
 		return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Krusty\Model\OrderedPallet');
 	}
@@ -33,48 +33,48 @@ class PalletMapper extends AbstractMapper
 		$sql .= 'delivered, block_id, start, end FROM produced_pallets pp ';
 		$sql .= 'LEFT JOIN Orders USING(order_id) ';
 		$sql .= 'LEFT JOIN Blocked b ON(pp.cookie = b.cookie ';
-		$sql .= 'AND DATE(produced) BETWEEN b.start AND b.end ';
-		$sql .= 'AND order_id IS NULL)';
+		                                $sql .= 'AND DATE(produced) BETWEEN b.start AND b.end ';
+		                                $sql .= 'AND order_id IS NULL)';
 
 
-		$params = array();
-		$criteria = array();
+$params = array();
+$criteria = array();
 
-		if(!empty($filters['start'])){
-			$params['start'] = $filters['start'];
-			array_push($criteria, 'DATE(produced) >= :start');
-		}
-		if(!empty($filters['end'])){
-			$params['end'] = $filters['end'];
-			array_push($criteria, 'DATE(produced) <= :end');
-		}
-		if(!empty($filters['cookie'])){
-			$params['cookie'] = $filters['cookie'];
-			array_push($criteria, 'pp.cookie = :cookie');
-		}
-		if(!empty($filters['order_id'])){
-			$params['order_id'] = $filters['order_id'];
-			array_push($criteria, 'order_id = :order_id');
-		}
-		if(!empty($filters['status'])){
-			switch ($filters['status']) {
-				case 'blocked':
-					array_push($criteria, 'block_id IS NOT NULL');
-					break;
-				case 'delivered':
-					array_push($criteria, 'order_id IS NOT NULL');
-					break;
-				case 'in-storage':
-					array_push($criteria, 'order_id IS NULL AND block_id IS NULL');
-			}
-		}
-		if(!empty($criteria)){
-			$sql .= ' WHERE ' . implode(' AND ', $criteria);
-		}
-		$sql .= ' ORDER BY produced DESC';
+if(!empty($filters['start'])){
+	$params['start'] = $filters['start'];
+	array_push($criteria, 'DATE(produced) >= :start');
+}
+if(!empty($filters['end'])){
+	$params['end'] = $filters['end'];
+	array_push($criteria, 'DATE(produced) <= :end');
+}
+if(!empty($filters['cookie'])){
+	$params['cookie'] = $filters['cookie'];
+	array_push($criteria, 'pp.cookie = :cookie');
+}
+if(!empty($filters['order_id'])){
+	$params['order_id'] = $filters['order_id'];
+	array_push($criteria, 'order_id = :order_id');
+}
+if(!empty($filters['status'])){
+	switch ($filters['status']) {
+		case 'blocked':
+		array_push($criteria, 'block_id IS NOT NULL');
+		break;
+		case 'delivered':
+		array_push($criteria, 'order_id IS NOT NULL');
+		break;
+		case 'in-storage':
+		array_push($criteria, 'order_id IS NULL AND block_id IS NULL');
+	}
+}
+if(!empty($criteria)){
+	$sql .= ' WHERE ' . implode(' AND ', $criteria);
+}
+$sql .= ' ORDER BY produced DESC';
 			// var_dump($sql);
-			$stmt = $db->prepare($sql);
-			$stmt->execute($params);
+$stmt = $db->prepare($sql);
+$stmt->execute($params);
 		// if(isset($options['start'])&&isset($options['end'])){
 		// 	$sql.=' where produced>=:start and produced<=:end';
 		// 	$stmt = $db->prepare($sql);
@@ -91,8 +91,8 @@ class PalletMapper extends AbstractMapper
 		// 	$stmt = $db->prepare($sql);
 		// 	$stmt->execute();
 		// }	
-		return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Krusty\Model\ProducedPallet');
-	}
+return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Krusty\Model\ProducedPallet');
+}
 
 
 
@@ -101,23 +101,50 @@ class PalletMapper extends AbstractMapper
 
 
 	// simulate production of new pallets
-	public function createPallets(array $data)
-	{
-		$query  = "INSERT INTO produced_pallets (cookie, produced)";
-		$query .= "VALUES (:cookie, NOW())";
+public function createPallets(array $data)
+{
 
-		$db = $this->getAdapter();
-		try{
-			$db->beginTransaction();
+		//array(2) { ["cookies"]=> string(14) "Almond delight" ["amount"]=> string(1) "1" } 
 
+		//select ingredient, quantity from Ingredients;
+
+		//select count(*) from Recipies r LEFT JOIN Ingredients i USING(ingredient) where cookie='Tango' and i.quantity < r.quantity*3000000 FOR UPDATE;
+
+
+	$db = $this->getAdapter();
+	try{
+			//trans
+		$db->beginTransaction();
+
+			//kolla antalet ingridienter som saknas, 0 som returvärde innebär att allt finns
+		$sql = "select count(*) from recipes r LEFT JOIN ingredients i USING(ingredient) where cookie=:cookie and i.quantity < r.quantity*:amount FOR UPDATE";
+		$stmt = $db->prepare($sql);
+		$stmt->execute(array('cookie' => $data['cookies'], 'amount' => $data			['amount']));
+		$result = $stmt->fetch(\PDO::FETCH_NUM);
+			if($result[0]!=0){//om det inte finns tillräckligt med stuff
+				throw new \Exception('Short on ingredients, please refill!');
+			}
+			//om det finns, uppdatera ingridients
+			$sql="update ingredients i LEFT JOIN recipes r USING(ingredient) SET i.quantity=i.quantity-:amount*r.quantity, latest_withdrawal=:amount_dup*r.quantity, modified=NOW() where cookie=:cookie";
+			$stmt = $db->prepare($sql);
+			$stmt->execute(array(
+			               'cookie' => $data['cookies'], 
+			               'amount' => $data['amount'],
+			               'amount_dup' => $data['amount']
+			               ));
+			//lägg till pallts
+
+			$query  = "INSERT INTO produced_pallets (cookie, produced)";
+			$query .= "VALUES (:cookie, NOW())";
 			$stmt = $db->prepare($query);
 			for($i = 0; $i < $data['amount']; $i++){
 				$stmt->execute(array(
-					'cookie' => $data['cookies']
-				));
+				               'cookie' => $data['cookies']
+				               ));
 			}
 			return $db->commit();
 		}catch(\PDOException $e){
+			//annars, rollback
 			$db->rollBack();
 			throw new \Exception($e->getMessage());
 		}

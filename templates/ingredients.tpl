@@ -2,18 +2,18 @@
 <thead>
 	<tr>
 		<th>Ingredient</th>
-		<th>Quantity</th>
-		<th>Last delivery date</th>
-		<th>Last delivery amount</th>
+		<th>Quantity in storage</th>
+		<th>Last used</th>
+		<th>Last withdrawal</th>
 	</tr>
 </thead>	
 <tbody>
 {{#ingredients}}
 		<tr>
 			<td>{{ingredient}}</td>
-			<td>{{quantity}}</td>
+			<td>{{quantity}} g</td>
 			<td>{{modified}}</td>
-			<td>{{lastAddition}}</td>
+			<td>{{latest_withdrawal}} g</td>
 		</tr>
 {{/ingredients}}
 </tbody>
