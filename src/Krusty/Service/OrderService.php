@@ -1,6 +1,8 @@
 <?php
 namespace Krusty\Service;
 
+use Krusty\Model\Mapper\PalletMapper;
+
 use \Krusty\Model\Order,
 	\Krusty\Model\Mapper\OrderMapper;
 
@@ -38,7 +40,6 @@ class OrderService extends AbstractService
 		//validate input..
 		
 		$order->order_id = $id;
-
 		return $mapper->deliver($order);
 	}
 
