@@ -95,10 +95,7 @@ class OrderMapper extends AbstractMapper
 				throw new \Exception('Not enough pallets in-storage');
 			}
 
-			//assign pallets to order
-			//UPDATE ProducedPallets SET order_id=1 WHERE pallet_id IN (SELECT * FROM ( SELECT pallet_id FROM ProducedPallets WHERE cookie='Tango' ORDER BY pallet_id asc limit 0, 2) as tmp);
-			
-
+			//assign pallets to order			
 			foreach($order->orderedPallets as $orderedPallet){
 				$o_cookie=$orderedPallet->cookie;
 				$o_quantity=$orderedPallet->quantity;
