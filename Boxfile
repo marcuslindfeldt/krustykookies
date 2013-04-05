@@ -8,7 +8,7 @@ web1:
   php_extensions: 
     - mysql
     - pdo
-    - pdo_mysql
+    - zip
     - curl
   php_version: "5.3.8"
   zend_extensions: 
