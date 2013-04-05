@@ -6,9 +6,19 @@ use \Krusty\Model\Blocked,
 
 class BlockedService extends AbstractService
 {
-	public function fetchBlocked()
+	public function fetchPreviousBlocks()
 	{
-		return $this->getMapper()->fetchAll();
+		return $this->getMapper()->fetchPrevious();
+	}
+
+	public function fetchUpcomingBlocks()
+	{
+		return $this->getMapper()->fetchUpcoming();
+	}
+
+	public function fetchActiveBlocks()
+	{
+		return $this->getMapper()->fetchActive();
 	}
 
 	public function block(array $data) 
@@ -16,13 +26,20 @@ class BlockedService extends AbstractService
 		$mapper = $this->getMapper();
 		$model = $this->getModel();
 
-		//validate end date
-		$date = explode('-', $data['end']);
-		if(count($date) != 3 || 
-		   !checkdate($date[1], $date[2], $date[0])) 
-		{
-			return false;
+		//filter
+		$args = array(
+			'start' => FILTER_SANITIZE_STRING,
+			'end' => FILTER_SANITIZE_STRING,
+			'cookie' => FILTER_SANITIZE_STRING,
+		);
+		$data = filter_var_array($data, $args);
+
+		//validate
+		if(count($data) != count(array_filter($data))){
+			throw new \InvalidArgumentException('Required fields missing');
 		}
+		//regexp date
+		//..
 
 		$model->fromArray($data);
 		

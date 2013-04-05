@@ -1,13 +1,13 @@
 <table class="table table-striped table-bordered">
-<thead>
-	<tr>
-		<th>Cookie</th>
-		<th>Description</th>
-		<th class="center-column">In storage</th>
-	</tr>
-</thead>	
-<tbody>
-{{#cookies}}
+	<thead>
+		<tr>
+			<th>Cookie</th>
+			<th>Description</th>
+			<th class="center-column">In storage</th>
+		</tr>
+	</thead>	
+	<tbody>
+		{{#cookies}}
 		<tr>
 			<td>
 				{{#isBlocked}}
@@ -25,8 +25,8 @@
 				{{/inStorage}}
 			</td>
 		</tr>
-{{/cookies}}
-</tbody>
+		{{/cookies}}
+	</tbody>
 </table>
 <br />
 <h2>Create a new product</h2>
@@ -49,15 +49,15 @@
 		</div>
 	</fieldset>
 	<fieldset>
-	<legend>Ingredients</legend>		
-	{{#ingredients}}
+		<legend>Ingredients</legend>		
+		{{#ingredients}}
 		<div class="control-group">
 			<label class="control-label" for="ingredients[{{ingredient}}]">{{ingredient}}</label>
 			<div class="controls">
 				<input type="number" name ="ingredients[{{ingredient}}]" id="ingredients[{{ingredient}}]" min="0" value="0">
 			</div>
 		</div>
-	{{/ingredients}}
+		{{/ingredients}}
 	</fieldset>
 	<div class="form-actions">
 		<input type="submit" class="btn btn-primary" value="Create" />
@@ -65,33 +65,97 @@
 	</div>
 </form>
 
-<h2>Temporarily blocked products</h2>
+<h2>Blocked products</h2>
+
+<table id="block-table" class="table table-bordered">
+	<thead>
+		<tr class="alert-danger">
+			<th colspan="4">
+				<strong>Current blocks</strong>
+			</th>
+		</tr>
+		<tr>
+			<th>Product</th>
+			<th>Block start date</th>
+			<th>Block release date</th>
+			<th class="center-column">Blocked pallets</th>
+		</tr>
+	</thead>
+	<tbody>
+		{{#blocks}}
+		<tr>
+			<td>{{cookie}}</td>
+			<td>{{start}}</td>
+			<td>{{end}}</td>
+			<td class="center-column">
+				<a href="/pallets?start={{start}}&end={{end}}&cookie={{cookie}}&status=blocked">view</a>
+			</td>
+		</tr>
+		{{/blocks}}
+		{{^blocks}}
+		<tr>
+			<td colspan="4">No results :(</td>
+		</tr>
+		{{/blocks}}
+	</tbody>
+</table>
+
+<table class="table table-bordered">
+	<thead>
+		<tr class="alert-danger">
+			<th colspan="3">
+				<strong>Upcoming blocks</strong>
+			</th>
+		</tr>
+		<tr>
+			<th>Product</th>
+			<th>Block start date</th>
+			<th>Block release date</th>
+		</tr>
+	</thead>
+	<tbody>
+		{{#next_blocks}}
+		<tr>
+			<td>{{cookie}}</td>
+			<td>{{start}}</td>
+			<td>{{end}}</td>
+		</tr>
+		{{/next_blocks}}
+		{{^next_blocks}}
+		<tr>
+			<td colspan="4">No results :(</td>
+		</tr>
+		{{/next_blocks}}
+	</tbody>
+ </table>
+
 <table id="block-table" class="table table-striped table-bordered">
   <thead>
-    <tr>
-      <th>Product</th>
-      <th>Block start date</th>
-      <th>Block release date</th>
-      <th class="center-column">Blocked pallets</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#blocked}}
-    <tr>
-      <td>{{cookie}}</td>
-      <td>{{start}}</td>
-      <td>{{end}}</td>
-      <td class="center-column">
-      		<a href="/pallets?blocked={{block_id}}">view</a>
-      </td>
-    </tr>
-    {{/blocked}}
-    {{^blocked}}
-      <tr>
-        <td colspan="4">No cookies have been blocked yet! :)</td>
-      </tr>
-    {{/blocked}}
-  </tbody>
+	<tr class="alert-danger">
+		<th colspan="3">
+			<strong>Previous blocks</strong>
+		</th>
+	</tr>
+<tr>
+	<th>Product</th>
+	<th>Block start date</th>
+	<th>Block release date</th>
+</tr>
+</thead>
+<tbody>
+	{{#prev_blocks}}
+	<tr>
+		<td>{{cookie}}</td>
+		<td>{{start}}</td>
+		<td>{{end}}</td>
+	</tr>
+	{{/prev_blocks}}
+	{{^prev_blocks}}
+	<tr>
+		<td colspan="4">No results :(</td>
+	</tr>
+	{{/prev_blocks}}
+</tbody>
 </table>
 
 <form action="/blocked" method="post" class="form-horizontal well">
@@ -108,9 +172,15 @@
 			</div>
 		</div>	
 		<div class="control-group">
-			<label class="control-label required" for="end">Block release date</label>
+			<label class="control-label required" for="rangeStart">Block start date</label>
 			<div class="controls">
-				<input type="text" name="end" id="end" class="datepicker" placeholder="DD/MM/YYYY" required />
+				<input type="text" name="start" id="rangeStart" class="min-date-tomorrow" placeholder="DD/MM/YYYY" required />
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label required" for="rangeEnd">Block release date</label>
+			<div class="controls">
+				<input type="text" name="end" id="rangeEnd" placeholder="DD/MM/YYYY" required />
 			</div>
 		</div>
 		<div class="controls">

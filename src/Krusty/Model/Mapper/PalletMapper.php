@@ -25,30 +25,70 @@ class PalletMapper extends AbstractMapper
 		return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Krusty\Model\OrderedPallet');
 	}
 
-	public function fetchProducedPallets(array $options=null)
+	public function fetchProducedPallets(array $filters=null)
 	{
 
 		$db = $this->getAdapter();
-		$sql  = 'SELECT cookie, order_id, pallet_id, produced, ';
-		$sql .= 'delivered, block_id FROM ProducedPallets ';
+		$sql  = 'SELECT pp.cookie, order_id, pallet_id, produced, ';
+		$sql .= 'delivered, block_id, start, end FROM ProducedPallets pp ';
 		$sql .= 'LEFT JOIN Orders USING(order_id) ';
-		$sql .= 'LEFT JOIN Blocked using(cookie)';
-		if(isset($options['start'])&&isset($options['end'])){
-			$sql.=' where produced>=:start and produced<=:end';
+		$sql .= 'LEFT JOIN Blocked b ON(pp.cookie = b.cookie ';
+		$sql .= 'AND DATE(produced) BETWEEN b.start AND b.end ';
+		$sql .= 'AND order_id IS NULL)';
+
+
+		$params = array();
+		$criteria = array();
+
+		// var_dump($filters);
+		
+		if(!empty($filters['start'])){
+			$params['start'] = $filters['start'];
+			array_push($criteria, 'DATE(produced) >= :start');
+		}
+		if(!empty($filters['end'])){
+			$params['end'] = $filters['end'];
+			array_push($criteria, 'DATE(produced) <= :end');
+		}
+		if(!empty($filters['cookie'])){
+			$params['cookie'] = $filters['cookie'];
+			array_push($criteria, 'pp.cookie = :cookie');
+		}
+		if(!empty($filters['status'])){
+			switch ($filters['status']) {
+				case 'blocked':
+					array_push($criteria, 'block_id IS NOT NULL');
+					break;
+				case 'delivered':
+					array_push($criteria, 'order_id IS NOT NULL');
+					break;
+				case 'in-storage':
+					array_push($criteria, 'order_id IS NULL AND block_id IS NULL');
+			}
+		}
+		if(!empty($criteria)){
+			$sql .= ' WHERE ' . implode(' AND ', $criteria);
+		}
+		$sql .= ' ORDER BY produced DESC';
+			// var_dump($sql);
 			$stmt = $db->prepare($sql);
-			$stmt->execute(array('start' => $options['start'], 'end' => $options['end']));
-		}else if(isset($options['cookie'])){
-			$sql.=' where cookie=:cookie';
-			$stmt = $db->prepare($sql);
-			$stmt->execute(array('cookie' => $options['cookie']));
-		}else if(isset($options['blocked'])){
-			$sql.=' where block_id=:blocked';
-			$stmt = $db->prepare($sql);
-			$stmt->execute(array('blocked' => $options['blocked']));
-		}else{
-			$stmt = $db->prepare($sql);
-			$stmt->execute();
-		}	
+			$stmt->execute($params);
+		// if(isset($options['start'])&&isset($options['end'])){
+		// 	$sql.=' where produced>=:start and produced<=:end';
+		// 	$stmt = $db->prepare($sql);
+		// 	$stmt->execute(array('start' => $options['start'], 'end' => $options['end']));
+		// }else if(isset($options['cookie'])){
+		// 	$sql.=' where cookie=:cookie';
+		// 	$stmt = $db->prepare($sql);
+		// 	$stmt->execute(array('cookie' => $options['cookie']));
+		// }else if(isset($options['blocked'])){
+		// 	$sql.=' where block_id=:blocked';
+		// 	$stmt = $db->prepare($sql);
+		// 	$stmt->execute(array('blocked' => $options['blocked']));
+		// }else{
+		// 	$stmt = $db->prepare($sql);
+		// 	$stmt->execute();
+		// }	
 		return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Krusty\Model\ProducedPallet');
 	}
 

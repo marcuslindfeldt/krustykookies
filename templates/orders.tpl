@@ -37,7 +37,7 @@
 		<div class="control-group">
 			<label class="control-label required" for="deadline">Delivery date</label>
 			<div class="controls">
-				<input type="text" name="deadline" id="deadline" class="datepicker" placeholder="DD/MM/YYYY" required />
+				<input type="text" name="deadline" id="deadline" class="datepicker mindate" placeholder="DD/MM/YYYY" required />
 			</div>
 		</div>
 	</fieldset>

@@ -1,11 +1,37 @@
-<!-- <div class="btn-toolbar clearfix">
-	<div class="btn-group pull-right" data-toggle="buttons-checkbox">
-	  <button type="button" class="btn" name="" id="" disabled><strong>Filter &raquo;</strong></button>
-	  <button type="button" class="btn btn-primary">In storage</button>
-	  <button type="button" class="btn btn-primary">Delivered</button>
-	  <button type="button" class="btn btn-primary">Blocked</button>
-	</div>
-</div> -->
+
+<form method="get" class="clearfix row-fluid form-inline">	
+
+	<input type="text" name="start" id="rangeStart" class="span3" placeholder="DD/MM/YYYY" value="{{filters.start}}" /> 
+	<input type="text" name="end" id="rangeEnd" class="span3" placeholder="DD/MM/YYYY" value="{{filters.end}}" /> 
+	<select name="cookie" class="span2">
+		<option value="">Cookie</option>
+		{{#cookies}}
+		<option {{selected}} value="{{cookie}}">{{cookie}}</option>
+		{{/cookies}}
+	</select>    
+	<select name="status" id="status" class="span2">
+		<option value="">Status</option>
+		<option value="blocked">Blocked</option>
+		<option value="in-storage">In storage</option>
+		<option value="delivered">Delivered</option>
+	</select>
+	
+	
+
+<div class="btn-group pull-right">
+  <button type="submit" class="btn">Filter</button>
+  <button class="btn dropdown-toggle" data-toggle="dropdown">
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <!-- dropdown menu links -->
+    <li><a href="/pallets">Reset</a></li>
+  </ul>
+</div>
+
+
+</form>
+
 
 <table class="table table-striped table-bordered">
 <thead>
@@ -19,16 +45,23 @@
 <tbody>
 {{#pallets}}
 		<tr>
-			<td><a href="#">{{pallet_id}}</a></td>
+			<td><a href="#">#{{pallet_id}}</a></td>
 			<td>{{cookie}}</td>
 			<td>{{produced}}</td>
 			<td class="center-column"><span class="label label-{{getStatus.label}}">{{getStatus.title}}</span></td>
 		</tr>
 {{/pallets}}
+{{^pallets.getNbPages}}
+		<tr>
+			<td colspan="4">No results :(</td>
+		</tr>
+{{/pallets.getNbPages}}
 </tbody>
 </table>
-
+<span class="input-small uneditable-input pull-right">#Results: {{pallets.getNbResults}}</span>
+{{#pallets.getNbPages}}
 {{{pallets_paginator}}}
+{{/pallets.getNbPages}}
 
 
 <h2>Produce new pallets</h2>

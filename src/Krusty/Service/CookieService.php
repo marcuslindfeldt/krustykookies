@@ -15,6 +15,7 @@ class CookieService extends AbstractService
 			 : $mapper->fetch($cookie);
 	}
 
+
 	public function addCookie(Cookie $cookie)
 	{
 		throw new \Exception('Not implemented.');

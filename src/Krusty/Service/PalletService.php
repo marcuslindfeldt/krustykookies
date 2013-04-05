@@ -13,10 +13,10 @@ class PalletService extends AbstractService
 		return $this->getMapper()->fetchPalletsForOrder($order);
 	}
 
-	public function fetchProducedPallets(array $options=null)
+	public function fetchProducedPallets(array $filters=null)
 	{
 		$mapper = $this->getMapper();
-		$result = $mapper->fetchProducedPallets($options);
+		$result = $mapper->fetchProducedPallets($filters);
 
 		return $this->createPaginator($result);
 	}

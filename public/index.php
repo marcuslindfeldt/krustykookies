@@ -121,12 +121,14 @@ $app->get('/cookies', function() use ($app, $serviceLocator){
 	//get cookie array from cookie service
 	$cookies = $serviceLocator('cookie')-> fetchCookies();
 	$ingredients = $serviceLocator('ingredient')->fetchIngredients()->getAdapter()->getArray();
-	$blocked = $serviceLocator('blocked')->fetchBlocked();
+	$blockService = $serviceLocator('blocked'); 
 	$app->render('cookies.tpl', array(
 		'heading' => "Products",
 		'cookies' => $cookies,
 		'ingredients' => $ingredients,
-		'blocked' => $blocked
+		'blocks' => $blockService->fetchActiveBlocks(),
+		'prev_blocks' => $blockService->fetchPreviousBlocks(),
+		'next_blocks' => $blockService->fetchUpcomingBlocks()
 	));
 });
 
@@ -211,16 +213,52 @@ $app->post('/ingredients', function() use ($app, $serviceLocator) {
 // List all pallets in storage, and their status
 $app->get('/pallets', function() use ($app, $serviceLocator)
 {
-	$options = $app->request()->get();
-	$pallets = $serviceLocator('pallet', $options)
-		->fetchProducedPallets($options);
+	$filters = $app->request()->get();
+	$pallets = $serviceLocator('pallet', $filters)
+		->fetchProducedPallets($filters);
 
 	$cookies = $serviceLocator('cookie')->fetchCookies();
+
+	// Repopulate cookie filter
+	foreach ($cookies as $cookie) {
+		if(isset($filters['cookie']) 
+		   && $filters['cookie'] == $cookie->cookie){
+			$cookie->selected = 'selected';
+			break;
+		}
+	}
 	$app->render('pallets.tpl', array(
 		'heading' => "Pallets",
 		'subheading' => "view & track cookie pallets",
 		'pallets' => $pallets,
 		'cookies' => $cookies,
+		'filters' => $filters,
+		'paginate' => array('pallets')
+	));
+});
+
+// List all pallets in storage, and their status
+$app->get('/pallets/:id', function($id) use ($app, $serviceLocator)
+{
+	$pallets = $serviceLocator('pallet')
+		->fetchPalletDetails($id);
+
+	$cookies = $serviceLocator('cookie')->fetchCookies();
+
+	// Repopulate cookie filter
+	foreach ($cookies as $cookie) {
+		if(isset($filters['cookie']) 
+		   && $filters['cookie'] == $cookie->cookie){
+			$cookie->selected = 'selected';
+			break;
+		}
+	}
+	$app->render('pallets.tpl', array(
+		'heading' => "Pallets",
+		'subheading' => "view & track cookie pallets",
+		'pallets' => $pallets,
+		'cookies' => $cookies,
+		'filters' => $filters,
 		'paginate' => array('pallets')
 	));
 });

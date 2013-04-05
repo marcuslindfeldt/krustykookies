@@ -17,11 +17,3 @@
   </form>
 
 </div> <!-- /container -->
-
-<script type="text/javascript">
-	$(document).ready(function(){
-		$('#login').find('button[type=button]').on('click', function(){
-			$(this).next().focus().select();
-		});
-	});
-</script>

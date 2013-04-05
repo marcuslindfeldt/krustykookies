@@ -59,7 +59,7 @@ class KrustyView extends \Slim\Extras\Views\Mustache
 				$paginators[$value.'_paginator'] = $this->paginatorView
 				->render($data,
 				$routeGenerator,
-				array('css_container_class' => 'pagination pagination-centered',
+				array('css_container_class' => 'pagination',
                                    'prev_message' => '&laquo;',
                                    'next_message' => '&raquo;')
 				);

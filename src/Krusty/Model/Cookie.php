@@ -9,6 +9,7 @@ class Cookie extends AbstractModel
 	public $description;
 	public $block_id;
 	public $in_store;
+	public $selected;
 
 	public function getDescription()
 	{
