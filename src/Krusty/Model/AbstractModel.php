@@ -4,7 +4,7 @@ namespace Krusty\Model;
 /**
 * Abstract model with some utility methods
 */
-abstract class AbstractModel implements \JsonSerializable
+abstract class AbstractModel
 {
 	
 	public function fromArray(array $data)
@@ -26,10 +26,5 @@ abstract class AbstractModel implements \JsonSerializable
 			$array = array_intersect_key($array, array_flip($fields));
 		}
 		return $array;	
-	}
-
-	public function jsonSerialize()
-	{
-		return $this->toArray();
 	}
 }
