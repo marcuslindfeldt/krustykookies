@@ -1,0 +1,11 @@
+web1: 
+  document_root: public
+  name: krustykookies
+  php_display_errors: "1"
+  php_error_reporting: 30719
+  php_extensions: 
+    - mysql
+    - pdo
+  php_version: "5.3.8"
+  zend_extensions: 
+    - xdebug
