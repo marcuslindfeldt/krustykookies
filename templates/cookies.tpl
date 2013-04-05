@@ -13,7 +13,7 @@
 				{{#isBlocked}}
 				<span class="label label-important pull-right">Blocked</span>
 				{{/isBlocked}}
-				<a href="/cookies/{{getId}}">{{cookie}}</a>
+				<a href="/cookies/{{getId}}">{{name}}</a>
 			</td>
 			<td>{{getDescription}}</td>
 			<td class="center-column">
@@ -94,7 +94,7 @@
 		{{/blocks}}
 		{{^blocks}}
 		<tr>
-			<td colspan="4">No results :(</td>
+			<td colspan="4">No results...</td>
 		</tr>
 		{{/blocks}}
 	</tbody>
@@ -102,7 +102,7 @@
 
 <table class="table table-bordered">
 	<thead>
-		<tr class="alert-danger">
+		<tr class="alert-info">
 			<th colspan="3">
 				<strong>Upcoming blocks</strong>
 			</th>
@@ -123,39 +123,36 @@
 		{{/next_blocks}}
 		{{^next_blocks}}
 		<tr>
-			<td colspan="4">No results :(</td>
+			<td colspan="4">No results...</td>
 		</tr>
 		{{/next_blocks}}
 	</tbody>
- </table>
-
-<table id="block-table" class="table table-striped table-bordered">
-  <thead>
-	<tr class="alert-danger">
-		<th colspan="3">
-			<strong>Previous blocks</strong>
-		</th>
-	</tr>
-<tr>
-	<th>Product</th>
-	<th>Block start date</th>
-	<th>Block release date</th>
-</tr>
-</thead>
-<tbody>
-	{{#prev_blocks}}
-	<tr>
-		<td>{{cookie}}</td>
-		<td>{{start}}</td>
-		<td>{{end}}</td>
-	</tr>
-	{{/prev_blocks}}
-	{{^prev_blocks}}
-	<tr>
-		<td colspan="4">No results :(</td>
-	</tr>
-	{{/prev_blocks}}
-</tbody>
+	<thead>
+		<tr class="alert-info">
+			<th colspan="3">
+				<strong>Previous blocks</strong>
+			</th>
+		</tr>
+		<tr>
+			<th>Product</th>
+			<th>Block start date</th>
+			<th>Block release date</th>
+		</tr>
+	</thead>
+	<tbody>
+		{{#prev_blocks}}
+		<tr>
+			<td>{{cookie}}</td>
+			<td>{{start}}</td>
+			<td>{{end}}</td>
+		</tr>
+		{{/prev_blocks}}
+		{{^prev_blocks}}
+		<tr>
+			<td colspan="4">No results...</td>
+		</tr>
+		{{/prev_blocks}}
+	</tbody>
 </table>
 
 <form action="/blocked" method="post" class="form-horizontal well">
@@ -166,7 +163,7 @@
 			<div class="controls">
 				<select name="cookie" id="cookie" required>
 					{{#cookies}}
-					<option value="{{cookie}}">{{cookie}}</option>
+					<option value="{{name}}">{{name}}</option>
 					{{/cookies}}
 				</select>                 
 			</div>

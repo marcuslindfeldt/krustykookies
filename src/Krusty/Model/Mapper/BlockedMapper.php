@@ -10,7 +10,7 @@ class BlockedMapper extends AbstractMapper
 
 	public function fetchUpcoming()
 	{
-		$sql  = 'SELECT * FROM Blocked WHERE CURDATE() < start ORDER BY end DESC';
+		$sql  = 'SELECT * FROM blocked WHERE CURDATE() < start ORDER BY end DESC';
 
 		$db = $this->getAdapter();
 		$stmt = $db->prepare($sql);
@@ -21,7 +21,7 @@ class BlockedMapper extends AbstractMapper
 
 	public function fetchActive()
 	{
-		$sql  = 'SELECT * FROM Blocked WHERE CURDATE() BETWEEN start AND end ORDER BY cookie';
+		$sql  = 'SELECT * FROM blocked WHERE CURDATE() BETWEEN start AND end ORDER BY cookie';
 
 		$db = $this->getAdapter();
 		$stmt = $db->prepare($sql);
@@ -32,7 +32,7 @@ class BlockedMapper extends AbstractMapper
 
 	public function fetchPrevious()
 	{
-		$sql  = 'SELECT * FROM Blocked WHERE CURDATE() > end ORDER BY end DESC';
+		$sql  = 'SELECT * FROM blocked WHERE CURDATE() > end ORDER BY end DESC';
 
 		$db = $this->getAdapter();
 		$stmt = $db->prepare($sql);
@@ -43,7 +43,7 @@ class BlockedMapper extends AbstractMapper
 
 	public function block(Blocked $block)
 	{
-		$sql  = 'INSERT INTO Blocked ';
+		$sql  = 'INSERT INTO blocked ';
 		$sql .= 'VALUES (NULL, :cookie, :start, :end)';
 
 		$db = $this->getAdapter();

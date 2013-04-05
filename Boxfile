@@ -6,10 +6,11 @@ web1:
   php_display_errors: "1"
   php_error_reporting: 30719
   php_extensions: 
+    - pdo_mysql
     - mysql
     - pdo
     - zip
     - curl
-  php_version: "5.3.8"
+  php_version: "5.3.10"
   zend_extensions: 
     - xdebug

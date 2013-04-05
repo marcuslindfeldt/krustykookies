@@ -9,9 +9,9 @@ class OrderMapper extends AbstractMapper
 {
 	public function save(Order $order)
 	{
-		$order_query  = 'INSERT INTO Orders ';
+		$order_query  = 'INSERT INTO orders ';
 		$order_query .= 'VALUES(NULL, :customer, NOW(), :deadline, null)';
-		$pallet_query  = 'INSERT INTO OrderedPallets ';
+		$pallet_query  = 'INSERT INTO ordered_pallets ';
 		$pallet_query .= 'VALUES (:order_id, :cookie, :quantity)';
 
 		$db = $this->getAdapter();
@@ -51,8 +51,12 @@ class OrderMapper extends AbstractMapper
 			$db->beginTransaction();
 
 			//Get order info
-			$sql  = 'SELECT * FROM OrderedPallets ';
+			$sql  = 'SELECT order_id, o.cookie, quantity, block_id ';
+			$sql .= 'FROM ordered_pallets o ';
+			$sql .= 'LEFT JOIN blocked b ON(o.cookie = b.cookie AND ';
+            $sql .= 'CURDATE() BETWEEN start AND end) ';
 			$sql .= 'WHERE order_id = :order_id';
+
 
 			$stmt = $db->prepare($sql);
 			$stmt->execute(array('order_id' => $order->order_id));
@@ -60,30 +64,35 @@ class OrderMapper extends AbstractMapper
 
 			//get produced pallets not assigned to an order grouped by cookies  and there count
 
-			$sql = 'SELECT cookie, count(*) FROM ProducedPallets WHERE order_id IS NULL GROUP BY cookie FOR UPDATE';
+			$sql = 'SELECT cookie, count(*) FROM produced_pallets WHERE order_id IS NULL GROUP BY cookie FOR UPDATE';
 			$stmt = $db->prepare($sql);
 			$stmt->execute();
 
 			//Check resultset to se that there is enough products in storage
 			$cookieChecked=0;
 			while ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
+
 				$db_cookie=$row[0];
 				$db_quantity=$row[1];
 
 				foreach($order->orderedPallets as $orderedPallet){
 					$o_cookie=$orderedPallet->cookie;
 					$o_quantity=$orderedPallet->quantity;
+					if($orderedPallet->block_id){
+						throw new \Exception('Can\'t deliver blocked products');
+					}
 					if($o_cookie==$db_cookie){//this is a cookie that is in the order
+
 						$cookieChecked++;
 						if($db_quantity<$o_quantity){
-							throw new \Exception;
+							throw new \Exception('Not enough pallets in-storage');
 						}
 					}
 
 				}
 			}
 			if($cookieChecked!=count($order->orderedPallets)){
-				throw new \Exception;
+				throw new \Exception('Not enough pallets in-storage');
 			}
 
 			//assign pallets to order
@@ -93,7 +102,7 @@ class OrderMapper extends AbstractMapper
 			foreach($order->orderedPallets as $orderedPallet){
 				$o_cookie=$orderedPallet->cookie;
 				$o_quantity=$orderedPallet->quantity;
-				$sql = 'UPDATE ProducedPallets SET order_id=:order_id WHERE pallet_id IN (SELECT * FROM ( SELECT pallet_id FROM ProducedPallets WHERE cookie=:cookie ORDER BY pallet_id asc limit 0, :limit) as tmp)';
+				$sql = 'UPDATE produced_pallets SET order_id=:order_id WHERE pallet_id IN (SELECT * FROM ( SELECT pallet_id FROM produced_pallets WHERE cookie=:cookie ORDER BY pallet_id asc limit 0, :limit) as tmp)';
 				$stmt = $db->prepare($sql);
 				$stmt->execute(array('order_id' => $order->order_id,
 					'cookie' => $o_cookie,
@@ -102,7 +111,7 @@ class OrderMapper extends AbstractMapper
 			}
 			// update order status
 
-			$sql  = 'UPDATE Orders ';
+			$sql  = 'UPDATE orders ';
 			$sql .= 'SET delivered = NOW()';
 			$sql .= 'WHERE order_id = :order_id';
 
@@ -115,12 +124,13 @@ class OrderMapper extends AbstractMapper
 			return $result;
 		}catch(\Exception $e){//if there is not enough cookies, make rollback
 			$db->rollBack();
+			throw new \Exception($e->getMessage());
 		}		
 	}
 
 	public function delete(Order $order)
 	{
-		$sql = 'DELETE FROM Orders WHERE order_id = :order_id';
+		$sql = 'DELETE FROM orders WHERE order_id = :order_id';
 
 		$db = $this->getAdapter();
 		$stmt = $db->prepare($sql);
@@ -132,7 +142,7 @@ class OrderMapper extends AbstractMapper
 
 	public function fetch($id)
 	{
-		$sql  = 'SELECT * FROM Orders ';
+		$sql  = 'SELECT * FROM orders ';
 		$sql .= 'WHERE order_id = :order_id';
 
 		$db = $this->getAdapter();
@@ -148,7 +158,7 @@ class OrderMapper extends AbstractMapper
 
 	public function fetchAll()
 	{
-		$sql  = 'SELECT * FROM Orders';
+		$sql  = 'SELECT * FROM orders';
 
 		$db = $this->getAdapter();
 

@@ -27,9 +27,9 @@
 		<label class="control-label required" for="ingredient">Ingredient</label>
 		<div class="controls">
 			<select class="span3" name="ingredient" id="ingredient" required>
-				{{#ingredients}}
+				{{#ingredients.getAdapter.getArray}}
 				<option value="{{ingredient}}">{{ingredient}}</option>
-				{{/ingredients}}
+				{{/ingredients.getAdapter.getArray}}
 			</select>
 		</div>
 	</div>

@@ -20,7 +20,7 @@ class CustomerMapper extends AbstractMapper
 	// return collection of customers
 	public function fetchAll()
 	{
-		$sql = 'SELECT * FROM Customers';
+		$sql = 'SELECT * FROM customers';
 
 		$db = $this->getAdapter();
 		$stmt = $db->prepare($sql);

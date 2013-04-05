@@ -4,13 +4,13 @@
 	<input type="text" name="start" id="rangeStart" class="span3" placeholder="DD/MM/YYYY" value="{{filters.start}}" /> 
 	<input type="text" name="end" id="rangeEnd" class="span3" placeholder="DD/MM/YYYY" value="{{filters.end}}" /> 
 	<select name="cookie" class="span2">
-		<option value="">Cookie</option>
+		<option value="">-- Cookie --</option>
 		{{#cookies}}
-		<option {{selected}} value="{{cookie}}">{{cookie}}</option>
+		<option {{selected}} value="{{name}}">{{name}}</option>
 		{{/cookies}}
 	</select>    
 	<select name="status" id="status" class="span2">
-		<option value="">Status</option>
+		<option value="">-- Status --</option>
 		<option value="blocked">Blocked</option>
 		<option value="in-storage">In storage</option>
 		<option value="delivered">Delivered</option>
@@ -72,7 +72,7 @@
 		<div class="controls">
 			<select class="span3" name="cookies" id="cookie" required>
 				{{#cookies}}
-				<option value="{{cookie}}">{{cookie}}</option>
+				<option value="{{name}}">{{name}}</option>
 				{{/cookies}}
 			</select>
 			<span class="help-block">Please enter a type of cookie.</span>

@@ -45,9 +45,9 @@
 	<legend>Products</legend>		
 	{{#cookies}}
 		<div class="control-group">
-			<label class="control-label" for="cookies[{{cookie}}]">{{cookie}}</label>
+			<label class="control-label" for="cookies[{{name}}]">{{name}}</label>
 			<div class="controls">
-				<input type="number" name ="cookies[{{cookie}}]" id="cookies[{{cookie}}]" min="0" value="0">
+				<input type="number" name ="cookies[{{name}}]" id="cookies[{{name}}]" min="0" value="0">
 			</div>
 		</div>
 	{{/cookies}}

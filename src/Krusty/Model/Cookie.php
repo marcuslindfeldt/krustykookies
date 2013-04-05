@@ -5,7 +5,7 @@ use \Krusty\Model\AbstractModel;
 
 class Cookie extends AbstractModel
 {
-	public $cookie;
+	public $name;
 	public $description;
 	public $block_id;
 	public $in_store;
@@ -28,6 +28,6 @@ class Cookie extends AbstractModel
 
 	public function getId()
 	{
-		return urlencode($this->cookie);
+		return urlencode($this->name);
 	}
 }

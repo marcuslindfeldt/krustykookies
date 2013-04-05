@@ -32,6 +32,12 @@ class OrderService extends AbstractService
 		return $mapper->save($order);
 	}
 
+	/**
+	 * TODO: Should not be able to deliver order
+	 * if any of the ordered cookies are currently blocked
+	 * @param  [type] $id [description]
+	 * @return [type]     [description]
+	 */
 	public function deliverOrder($id)
 	{
 		$mapper = $this->getMapper();

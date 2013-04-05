@@ -32,9 +32,4 @@ abstract class AbstractModel implements \JsonSerializable
 	{
 		return $this->toArray();
 	}
-
-	private function filter($var)
-	{
-		
-	}
 }

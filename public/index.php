@@ -133,24 +133,24 @@ $app->get('/cookies', function() use ($app, $serviceLocator){
 	));
 });
 
-// List recipie for a cookie
+// List recipe for a cookie
 $app->get('/cookies/:id', function ($id) use ($app, $serviceLocator) {
 	$cookie = urldecode($id);
-	if( ($recipie = $serviceLocator('recipie')->fetchRecipie($cookie)) == null ){
+	if( ($recipe = $serviceLocator('recipe')->fetchRecipe($cookie)) == null ){
 		//Not found, redirect to 404
 		$app->notFound();
 	}
 	$app->render('cookie_details.tpl', array(
-		'heading' => "Recipie",
-		'subheading' => $recipie->name,
-		'recipie' => $recipie
+		'heading' => "Recipe",
+		'subheading' => $recipe->name,
+		'recipe' => $recipe
 	));
 });
 
 $app->post('/cookies', function() use ($app, $serviceLocator) {
 	$data = $app->request()->post();
 	try{
-		$serviceLocator('recipie')->addRecipie($data);
+		$serviceLocator('recipe')->addRecipe($data);
 		$app->flash('success', 'You successfully added a new cookie!');
 	}catch (\Exception $e){
 		$app->flash('error', $e->getMessage());
@@ -223,7 +223,7 @@ $app->get('/pallets', function() use ($app, $serviceLocator)
 	// Repopulate cookie filter
 	foreach ($cookies as $cookie) {
 		if(isset($filters['cookie']) 
-		   && $filters['cookie'] == $cookie->cookie){
+		   && $filters['cookie'] == $cookie->name){
 			$cookie->selected = 'selected';
 			break;
 		}

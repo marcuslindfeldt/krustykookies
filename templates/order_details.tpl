@@ -30,7 +30,7 @@
 </tbody>
 <tbody>
 	<tr>
-		<th colspan="2">Ordered Cookies <small><a href="/pallets?order_id={{order.order_id}}">view pallets</a></small></th>
+		<th colspan="2">Ordered Cookies {{#order.delivered}}<small><a href="/pallets?order_id={{order.order_id}}">track pallets</a></small>{{/order.delivered}}</th>
 	</tr>
 	<tr>
 		<th class="muted">Name</th>

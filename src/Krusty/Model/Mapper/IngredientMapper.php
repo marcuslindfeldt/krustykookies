@@ -11,7 +11,7 @@ class IngredientMapper extends AbstractMapper
 	// return a collection of ingredients
 	public function fetchAll()
 	{
-		$sql = 'SELECT * FROM Ingredients';
+		$sql = 'SELECT * FROM ingredients';
 
 		$db = $this->getAdapter();
 		$stmt = $db->prepare($sql);
@@ -24,7 +24,7 @@ class IngredientMapper extends AbstractMapper
 
 	public function update(Ingredient $i)
 	{
-		$sql  = 'UPDATE Ingredients ';
+		$sql  = 'UPDATE ingredients ';
 		$sql .= 'SET quantity = quantity + :quantity ';
 		$sql .= 'WHERE ingredient = :ingredient';
 

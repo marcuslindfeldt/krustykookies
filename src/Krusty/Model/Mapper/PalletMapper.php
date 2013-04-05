@@ -13,7 +13,7 @@ class PalletMapper extends AbstractMapper
 
 	public function fetchPalletsForOrder(Order $order)
 	{
-		$sql  = 'SELECT * FROM OrderedPallets ';
+		$sql  = 'SELECT * FROM ordered_pallets ';
 		$sql .= 'WHERE order_id = :order_id ';
 
 		$db = $this->getAdapter();
@@ -30,7 +30,7 @@ class PalletMapper extends AbstractMapper
 
 		$db = $this->getAdapter();
 		$sql  = 'SELECT pp.cookie, order_id, pallet_id, produced, ';
-		$sql .= 'delivered, block_id, start, end FROM ProducedPallets pp ';
+		$sql .= 'delivered, block_id, start, end FROM produced_pallets pp ';
 		$sql .= 'LEFT JOIN Orders USING(order_id) ';
 		$sql .= 'LEFT JOIN Blocked b ON(pp.cookie = b.cookie ';
 		$sql .= 'AND DATE(produced) BETWEEN b.start AND b.end ';
@@ -103,7 +103,7 @@ class PalletMapper extends AbstractMapper
 	// simulate production of new pallets
 	public function createPallets(array $data)
 	{
-		$query  = "INSERT INTO ProducedPallets (cookie, produced)";
+		$query  = "INSERT INTO produced_pallets (cookie, produced)";
 		$query .= "VALUES (:cookie, NOW())";
 
 		$db = $this->getAdapter();

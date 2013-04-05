@@ -7,12 +7,12 @@
 	</tr>
 </thead>	
 <tbody>
-{{#recipie.ingredients}}
+{{#recipe.ingredients}}
 	<tr>
 		<td>{{{ingredient}}}</td>
 		<td>{{quantity}} g</td>
 	</tr>
-{{/recipie.ingredients}}
+{{/recipe.ingredients}}
 </tbody>
 </table>
 
