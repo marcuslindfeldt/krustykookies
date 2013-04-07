@@ -137,7 +137,7 @@ $app->get('/cookies', function() use ($app, $serviceLocator){
 	));
 });
 
-// List recipe for a cookie
+
 $app->get('/cookies/:id', function ($id) use ($app, $serviceLocator) {
 	$cookie = urldecode($id);
 	if( ($recipe = $serviceLocator('recipe')->fetchRecipe($cookie)) == null ){
@@ -151,11 +151,36 @@ $app->get('/cookies/:id', function ($id) use ($app, $serviceLocator) {
 	));
 });
 
+$app->get('/cookies/:id/edit', function ($id) use ($app, $serviceLocator) {
+	$cookie = urldecode($id);
+	if( ($recipe = $serviceLocator('recipe')->fetchRecipe($cookie)) == null ){
+		//Not found, redirect to 404
+		$app->notFound();
+	}
+	$app->render('edit_recipe.tpl', array(
+		'heading' => "Edit Recipe",
+		'subheading' => $recipe->name,
+		'recipe' => $recipe
+	));
+});
+
+$app->post('/cookies/:id/edit', function ($id) use ($app, $serviceLocator) {
+
+	$data = $app->request()->post();
+	try{
+		$serviceLocator('recipe')->editRecipe($id, $data);
+		$app->flash('success', 'Recipe has been updated');
+	}catch (\Exception $e){
+		$app->flash('error', $e->getMessage());
+	}
+	$app->redirect('/cookies/' . $id);
+});
+
 $app->post('/cookies', function() use ($app, $serviceLocator) {
 	$data = $app->request()->post();
 	try{
 		$serviceLocator('recipe')->addRecipe($data);
-		$app->flash('success', 'You successfully added a new cookie!');
+		$app->flash('success', 'You successfully saved a new cookie!');
 	}catch (\Exception $e){
 		$app->flash('error', $e->getMessage());
 	}

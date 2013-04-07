@@ -48,67 +48,52 @@ class PalletMapper extends AbstractMapper
 		$sql .= 'delivered, block_id, start, end FROM produced_pallets pp ';
 		$sql .= 'LEFT JOIN Orders USING(order_id) ';
 		$sql .= 'LEFT JOIN Blocked b ON(pp.cookie = b.cookie ';
-		$sql .= 'AND CURDATE() BETWEEN b.start AND b.end ';
-		$sql .= 'AND order_id IS NULL)';
+		                                $sql .= 'AND CURDATE() BETWEEN b.start AND b.end ';
+		                                $sql .= 'AND order_id IS NULL)';
+	$params = array();
+	$criteria = array();
 
-
-$params = array();
-$criteria = array();
-
-if(!empty($filters['start'])){
-	$params['start'] = $filters['start'];
-	array_push($criteria, 'DATE(produced) >= :start');
-}
-if(!empty($filters['end'])){
-	$params['end'] = $filters['end'];
-	array_push($criteria, 'DATE(produced) <= :end');
-}
-if(!empty($filters['cookie'])){
-	$params['cookie'] = $filters['cookie'];
-	array_push($criteria, 'pp.cookie = :cookie');
-}
-if(!empty($filters['order_id'])){
-	$params['order_id'] = $filters['order_id'];
-	array_push($criteria, 'order_id = :order_id');
-}
-if(!empty($filters['status'])){
-	switch ($filters['status']) {
-		case 'blocked':
-		array_push($criteria, 'block_id IS NOT NULL');
-		break;
-		case 'delivered':
-		array_push($criteria, 'order_id IS NOT NULL');
-		break;
-		case 'in-storage':
-		array_push($criteria, 'order_id IS NULL AND block_id IS NULL');
+	if(!empty($filters['start'])){
+		$params['start'] = $filters['start'];
+		array_push($criteria, 'DATE(produced) >= :start');
 	}
+	if(!empty($filters['end'])){
+		$params['end'] = $filters['end'];
+		array_push($criteria, 'DATE(produced) <= :end');
+	}
+	if(!empty($filters['cookie'])){
+		$params['cookie'] = $filters['cookie'];
+		array_push($criteria, 'pp.cookie = :cookie');
+	}
+	if(!empty($filters['order_id'])){
+		$params['order_id'] = $filters['order_id'];
+		array_push($criteria, 'order_id = :order_id');
+	}
+	if(!empty($filters['status'])){
+		switch ($filters['status']) {
+			case 'blocked':
+			array_push($criteria, 'block_id IS NOT NULL');
+			break;
+			case 'delivered':
+			array_push($criteria, 'order_id IS NOT NULL');
+			break;
+			case 'in-storage':
+			array_push($criteria, 'order_id IS NULL AND block_id IS NULL');
+		}
+	}
+	if(!empty($criteria)){
+		$sql .= ' WHERE ' . implode(' AND ', $criteria);
+	}
+	$sql .= ' ORDER BY produced DESC';
+	$stmt = $db->prepare($sql);
+	$stmt->execute($params);
+
+	return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Krusty\Model\ProducedPallet');
 }
-if(!empty($criteria)){
-	$sql .= ' WHERE ' . implode(' AND ', $criteria);
-}
-$sql .= ' ORDER BY produced DESC';
-$stmt = $db->prepare($sql);
-$stmt->execute($params);
-
-return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Krusty\Model\ProducedPallet');
-}
-
-
-
-
-
-
 
 	// simulate production of new pallets
 public function createPallets(array $data)
 {
-
-		//array(2) { ["cookies"]=> string(14) "Almond delight" ["amount"]=> string(1) "1" } 
-
-		//select ingredient, quantity from Ingredients;
-
-		//select count(*) from Recipies r LEFT JOIN Ingredients i USING(ingredient) where cookie='Tango' and i.quantity < r.quantity*3000000 FOR UPDATE;
-
 
 	$db = $this->getAdapter();
 	try{
@@ -146,13 +131,6 @@ public function createPallets(array $data)
 			//annars, rollback
 			$db->rollBack();
 			throw new \Exception($e->getMessage());
-		}
-	}
-
-	protected function producedBetween()
-	{
-		if(isset($this->start) && isset($this->end)){
-			return "WHERE produced BETWEEN '{$this->start}' AND '{$this->end}' ";
 		}
 	}
 }

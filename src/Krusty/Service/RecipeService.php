@@ -13,6 +13,23 @@ class RecipeService extends AbstractService
 		return $mapper->fetch($cookie);
 	}
 
+	public function editRecipe($name, array $data)
+	{
+		$mapper = $this->getMapper();
+		$recipe = $this->getModel();
+
+		$cookie = new Cookie;
+		$cookie->name = $name;
+
+		$recipe->fromArray($data);
+		$recipe->cookie = $cookie;
+
+		//validate post data
+		// ...
+		
+		return $mapper->update($recipe);
+	}
+
 	public function addRecipe(array $data)
 	{
 		$mapper = $this->getMapper();

@@ -16,6 +16,8 @@
 </tbody>
 </table>
 
+<a class="btn btn-primary pull-right" href="/cookies/{{recipe.name}}/edit">Edit</a>
+
 <ul class="pager">
   <li class="previous">
     <a href="/cookies">&larr; Back to products</a>

@@ -55,4 +55,30 @@ class RecipeMapper extends AbstractMapper
 			throw new \Exception($e->getMessage());
 		}
 	}
+
+	public function update(Recipe $r)
+	{
+		$sql  = 'UPDATE recipes SET quantity = :quantity ';
+		$sql .= 'WHERE cookie = :cookie AND ingredient = :ingredient';
+
+		$db = $this->getAdapter();
+
+		try{
+			$db->beginTransaction();
+			
+			$stmt = $db->prepare($sql);
+			
+			foreach($r->ingredients as $ingredient => $quantity){
+				$stmt->execute(array(
+					'cookie' => $r->cookie->name,
+					'ingredient' => $ingredient,
+					'quantity' => $quantity
+				));
+			}
+			return $db->commit();
+		}catch (\Exception $e){
+			$db->rollBack();
+			throw new \Exception($e->getMessage());
+		}
+	}
 }

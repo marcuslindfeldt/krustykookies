@@ -29,9 +29,10 @@ class KrustyView extends \Slim\Extras\Views\Mustache
 			$crumb = new \stdClass();
 			$crumb->active = false;
 			$crumb->uri = implode('/',array_slice($crumbs, 0, $key+1));
-			$crumb->title = ucfirst(trim($val));
+			$crumb->title = urldecode(ucfirst(trim($val)));
 			$val = $crumb;
 		});
+
 
 		if(!empty($crumbs))
 		end($crumbs)->active = true;
