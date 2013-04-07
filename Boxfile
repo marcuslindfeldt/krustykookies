@@ -1,16 +1,16 @@
 web1: 
-  after_build: 
-    - "if [ ! -f composer.phar ]; then curl -s http://getcomposer.org/installer | php; fi; php composer.phar install"
-  document_root: public
   name: krustykookies
+  document_root: public
+  php_version: "5.3.10"
   php_display_errors: "1"
   php_error_reporting: 30719
   php_extensions: 
+    - mbstring
+    - mcrypt
     - pdo_mysql
-    - mysql
-    - pdo
     - zip
     - curl
-  php_version: "5.3.10"
   zend_extensions: 
     - xdebug
+  after_build: 
+    - "if [ ! -f composer.phar ]; then curl -s http://getcomposer.org/installer | php; fi; php composer.phar install"

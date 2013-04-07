@@ -41,7 +41,14 @@
 {{#pallets}}
 	<tr>
 		<td>{{{cookie}}}</td>
-		<td><a href="/pallets?cookie={{cookie}}&order_id={{order.order_id}}">{{quantity}}</a></td>
+		<td>
+		{{#order.delivered}}
+			<a href="/pallets?cookie={{cookie}}&order_id={{order.order_id}}">{{quantity}}</a>
+		{{/order.delivered}}	
+		{{^order.delivered}}
+			{{quantity}}
+		{{/order.delivered}}	
+		</td>
 	</tr>
 {{/pallets}}
 </tbody>
