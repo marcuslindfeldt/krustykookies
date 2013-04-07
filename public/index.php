@@ -9,6 +9,7 @@ use \Slim\Slim,
 
 define("APPLICATION_PATH", __DIR__ . '/..');
 
+
 $config = Config::instance();
 // Initialize framework
 $app = new Slim(array(
@@ -18,7 +19,7 @@ $app = new Slim(array(
 
 // Add session cookie for flash messages
 $app->add(new SessionCookie());
-// Add basic authentication (user = admin, pass = password)/opa
+// Add basic authentication (user = admin, pass = password)
 $app->add(new StrongAuth($config->auth));
 
 // Init services
@@ -47,7 +48,7 @@ $app->post('/login', function () use ($app) {
 
     if ($auth->login($user, $pass)) {
         $app->flash('info', "Successfully logged in as {$user}.");
-        $app->redirect('/orders');
+        $app->redirect('/');
     }
 
     $app->redirect('/login');
@@ -63,7 +64,8 @@ $app->get('/logout', function () use ($app) {
 
 // List all orders
 $app->get('/orders', function() use ($app, $serviceLocator) {
-	$orders = $serviceLocator('order')->fetchOrders();
+	$data = $app->request()->get();
+	$orders = $serviceLocator('order')->fetchOrders(null, $data);
 	$cookies = $serviceLocator('cookie')-> fetchCookies();
 	$customers = $serviceLocator('customer')-> fetchCustomers();
 	$app->render('orders.tpl', array(
@@ -97,11 +99,13 @@ $app->get('/orders/:id', function($id) use ($app, $serviceLocator) {
 	$orderedPallets = $serviceLocator('pallet')
 		->fetchPalletsForOrder($order);
 
+	$prev = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/orders';
 	$app->render('order_details.tpl', array(
 		'order' => $order,
 		'heading' => "Order Details",
 		'subheading' => "#{$order->order_id}, {$order->customer}",
-		'pallets' => $orderedPallets
+		'pallets' => $orderedPallets,
+		'prev_page' => $prev
 	));
 });
 
@@ -169,12 +173,6 @@ $app->post('/blocked', function() use ($app, $serviceLocator) {
 	}
 	$app->redirect('/cookies');
 	
-});
-
-// Unblock cookie
-$app->delete('/blocked/:id', function($id) use ($app, $serviceLocator) {
-	$app->flash('error', 'Not implemented!');
-	$app->redirect('/cookies');
 });
 
 // List all customers

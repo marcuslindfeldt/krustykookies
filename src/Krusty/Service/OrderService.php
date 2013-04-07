@@ -8,12 +8,12 @@ use \Krusty\Model\Order,
 
 class OrderService extends AbstractService
 {
-	public function fetchOrders($id = null)
+	public function fetchOrders($id = null, $filters = null)
 	{
 		$mapper = $this->getMapper();
 
 		return (is_null($id))
-			 ? $mapper->fetchAll()
+			 ? $mapper->fetchAll($filters)
 			 : $mapper->fetch($id);
 	}
 
@@ -32,12 +32,6 @@ class OrderService extends AbstractService
 		return $mapper->save($order);
 	}
 
-	/**
-	 * TODO: Should not be able to deliver order
-	 * if any of the ordered cookies are currently blocked
-	 * @param  [type] $id [description]
-	 * @return [type]     [description]
-	 */
 	public function deliverOrder($id)
 	{
 		$mapper = $this->getMapper();

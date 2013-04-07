@@ -148,19 +148,33 @@ class OrderMapper extends AbstractMapper
 		$stmt->execute(array(
 		   'order_id' => $id
 		));
-		$stmt->setFetchMode(\PDO::FETCH_CLASS, "\Krusty\Model\Order");
 
-		return $stmt->fetch();
+		return $stmt->fetchObject('\Krusty\Model\Order');
 	}
 
-	public function fetchAll()
+	public function fetchAll($filters = null)
 	{
 		$sql  = 'SELECT * FROM orders';
 
+		$params = array();
+		$criteria = array();
+
+		if(!empty($filters['start'])){
+			$params['start'] = $filters['start'];
+			array_push($criteria, 'deadline >= :start');
+		}
+		if(!empty($filters['end'])){
+			$params['end'] = $filters['end'];
+			array_push($criteria, 'deadline <= :end');
+		}
+
+		if(!empty($criteria)){
+			$sql .= ' WHERE ' . implode(' AND ', $criteria);
+		}
 		$db = $this->getAdapter();
 
 		$stmt = $db->prepare($sql);
-		$stmt->execute();
+		$stmt->execute($params);
 
 		return $stmt->fetchAll(\PDO::FETCH_CLASS, "\Krusty\Model\Order");
 	}

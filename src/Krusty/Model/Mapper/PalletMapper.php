@@ -48,8 +48,8 @@ class PalletMapper extends AbstractMapper
 		$sql .= 'delivered, block_id, start, end FROM produced_pallets pp ';
 		$sql .= 'LEFT JOIN Orders USING(order_id) ';
 		$sql .= 'LEFT JOIN Blocked b ON(pp.cookie = b.cookie ';
-		                                $sql .= 'AND DATE(produced) BETWEEN b.start AND b.end ';
-		                                $sql .= 'AND order_id IS NULL)';
+		$sql .= 'AND CURDATE() BETWEEN b.start AND b.end ';
+		$sql .= 'AND order_id IS NULL)';
 
 
 $params = array();

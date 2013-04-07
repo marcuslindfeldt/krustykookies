@@ -60,6 +60,6 @@
 
 <ul class="pager">
   <li class="previous">
-    <a href="/orders">&larr; Back to orders</a>
+    <a href="{{prev_page}}">&larr; Back</a>
   </li>
 </ul>
