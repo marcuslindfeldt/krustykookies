@@ -21,6 +21,11 @@ class PalletService extends AbstractService
 		return $this->createPaginator($result);
 	}
 
+	public function fetchPalletDetails($id)
+	{
+		return $this->getMapper()->fetch($id);
+	}
+
 	public function producePallets($data)
 	{
 		return $this->getMapper()->createPallets($data);

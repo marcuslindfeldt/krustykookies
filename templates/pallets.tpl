@@ -45,7 +45,7 @@
 <tbody>
 {{#pallets}}
 		<tr>
-			<td><a href="#">#{{pallet_id}}</a></td>
+			<td><a href="/pallets/{{pallet_id}}">#{{pallet_id}}</a></td>
 			<td>{{cookie}}</td>
 			<td>{{produced}}</td>
 			<td class="center-column"><span class="label label-{{getStatus.label}}">{{getStatus.title}}</span></td>

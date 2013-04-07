@@ -18,7 +18,7 @@ $app = new Slim(array(
 
 // Add session cookie for flash messages
 $app->add(new SessionCookie());
-// Add basic authentication (user = admin, pass = password)
+// Add basic authentication (user = admin, pass = password)/opa
 $app->add(new StrongAuth($config->auth));
 
 // Init services
@@ -241,26 +241,14 @@ $app->get('/pallets', function() use ($app, $serviceLocator)
 // List all pallets in storage, and their status
 $app->get('/pallets/:id', function($id) use ($app, $serviceLocator)
 {
-	$pallets = $serviceLocator('pallet')
+	$pallet = $serviceLocator('pallet')
 		->fetchPalletDetails($id);
-
-	$cookies = $serviceLocator('cookie')->fetchCookies();
-
-	// Repopulate cookie filter
-	foreach ($cookies as $cookie) {
-		if(isset($filters['cookie']) 
-		   && $filters['cookie'] == $cookie->cookie){
-			$cookie->selected = 'selected';
-			break;
-		}
-	}
-	$app->render('pallets.tpl', array(
-		'heading' => "Pallets",
-		'subheading' => "view & track cookie pallets",
-		'pallets' => $pallets,
-		'cookies' => $cookies,
-		'filters' => $filters,
-		'paginate' => array('pallets')
+	$prev = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/pallets';
+	$app->render('pallet_details.tpl', array(
+		'heading' => "Pallet details",
+		'pallet' => $pallet,
+		'prev_page' => $prev,
+		'subheading' => ""
 	));
 });
 

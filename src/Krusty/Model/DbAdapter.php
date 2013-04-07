@@ -21,6 +21,7 @@ class DbAdapter
 		$config = Config::instance();
 		$dsn  = 'mysql:host=' . $config->db_host . ';';
 		$dsn .= 'dbname=' . $config->db_name . ';';
+		$dsn .= 'charset=' . $config->db_charset . ';';
 		$db = new \PDO($dsn, $config->db_user, $config->db_pass);
 	    $db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 	    $db->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);

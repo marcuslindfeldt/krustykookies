@@ -25,6 +25,21 @@ class PalletMapper extends AbstractMapper
 		return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Krusty\Model\OrderedPallet');
 	}
 
+	public function fetch($id)
+	{
+		$sql  = 'SELECT * FROM produced_pallets ';
+		$sql .= 'LEFT JOIN orders USING(order_id) ';
+		$sql .= 'WHERE pallet_id = :id';
+		
+		$db = $this->getAdapter();
+		$stmt = $db->prepare($sql);
+		$stmt->execute(array(
+		               'id' => $id
+		               ));
+
+		return $stmt->fetchObject('\Krusty\Model\ProducedPallet');
+	}
+
 	public function fetchProducedPallets(array $filters=null)
 	{
 
@@ -72,25 +87,9 @@ if(!empty($criteria)){
 	$sql .= ' WHERE ' . implode(' AND ', $criteria);
 }
 $sql .= ' ORDER BY produced DESC';
-			// var_dump($sql);
 $stmt = $db->prepare($sql);
 $stmt->execute($params);
-		// if(isset($options['start'])&&isset($options['end'])){
-		// 	$sql.=' where produced>=:start and produced<=:end';
-		// 	$stmt = $db->prepare($sql);
-		// 	$stmt->execute(array('start' => $options['start'], 'end' => $options['end']));
-		// }else if(isset($options['cookie'])){
-		// 	$sql.=' where cookie=:cookie';
-		// 	$stmt = $db->prepare($sql);
-		// 	$stmt->execute(array('cookie' => $options['cookie']));
-		// }else if(isset($options['blocked'])){
-		// 	$sql.=' where block_id=:blocked';
-		// 	$stmt = $db->prepare($sql);
-		// 	$stmt->execute(array('blocked' => $options['blocked']));
-		// }else{
-		// 	$stmt = $db->prepare($sql);
-		// 	$stmt->execute();
-		// }	
+
 return $stmt->fetchAll(\PDO::FETCH_CLASS, '\Krusty\Model\ProducedPallet');
 }
 
